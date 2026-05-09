@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Test</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .photo-thumb {
+          display: inline-block; margin: 5px; position: relative;
+        }
+        .photo-thumb button {
+          position: absolute; top: 0; right: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+    </header>
+    <main>
+        <h1>Add Test</h1>
+        <form id="edit-test-form" enctype="multipart/form-data">
+            <label for="variant">Variant:</label>
+            <input type="text" id="variant" name="variant" required>
+
+            <div>
+                <label for="M1">M1:</label>
+                <div id="M1" class="clickable-box" onclick="cycleLetter('M1')">а</div>
+                <input type="hidden" id="M1-hidden" name="M1" value="а">
+            </div>
+            <div>
+            <label for="M2">M2:</label>
+            <div id="M2" class="clickable-box" onclick="cycleLetter('M2')">а</div>
+            <input type="hidden" id="M2-hidden" name="M2" value="а">
+            </div>
+            <div>
+            <label for="M3">M3:</label>
+            <div id="M3" class="clickable-box" onclick="cycleLetter('M3')">а</div>
+            <input type="hidden" id="M3-hidden" name="M3" value="а">
+            </div>
+            <div>
+            <label for="M4">M4:</label>
+            <div id="M4" class="clickable-box" onclick="cycleLetter('M4')">а</div>
+            <input type="hidden" id="M4-hidden" name="M4" value="а">
+            </div>
+            <div>
+            <label for="M5">M5:</label>
+            <div id="M5" class="clickable-box" onclick="cycleLetter('M5')">а</div>
+            <input type="hidden" id="M5-hidden" name="M5" value="а">
+            </div>
+            <div>
+            <label for="M6">M6:</label>
+            <div id="M6" class="clickable-box" onclick="cycleLetter('M6')">а</div>
+            <input type="hidden" id="M6-hidden" name="M6" value="а">
+            </div>
+            <div>
+            <label for="M7">M7:</label>
+            <div id="M7" class="clickable-box" onclick="cycleLetter('M7')">а</div>
+            <input type="hidden" id="M7-hidden" name="M7" value="а">
+            </div>
+            <div>
+            <label for="M8">M8:</label>
+            <div id="M8" class="clickable-box" onclick="cycleLetter('M8')">а</div>
+            <input type="hidden" id="M8-hidden" name="M8" value="а">
+            </div>
+            <div>
+            <label for="M9">M9:</label>
+            <div id="M9" class="clickable-box" onclick="cycleLetter('M9')">а</div>
+            <input type="hidden" id="M9-hidden" name="M9" value="а">
+            </div>
+            <div>
+            <label for="M10">M10:</label>
+            <div id="M10" class="clickable-box" onclick="cycleLetter('M10')">а</div>
+            <input type="hidden" id="M10-hidden" name="M10" value="а">
+            </div>
+            <div>
+            <label for="M11">M11:</label>
+            <div id="M11" class="clickable-box" onclick="cycleLetter('M11')">а</div>
+            <input type="hidden" id="M11-hidden" name="M11" value="а">
+            </div>
+            <div>
+            <label for="M12">M12:</label>
+            <div id="M12" class="clickable-box" onclick="cycleLetter('M12')">а</div>
+            <input type="hidden" id="M12-hidden" name="M12" value="а">
+            </div>
+            <div>
+            <label for="M13">M13:</label>
+            <div id="M13" class="clickable-box" onclick="cycleLetter('M13')">а</div>
+            <input type="hidden" id="M13-hidden" name="M13" value="а">
+            </div>
+            <div>
+            <label for="M14">M14:</label>
+            <div id="M14" class="clickable-box" onclick="cycleLetter('M14')">а</div>
+            <input type="hidden" id="M14-hidden" name="M14" value="а">
+            </div>
+            <div>
+            <label for="M15">M15:</label>
+            <div id="M15" class="clickable-box" onclick="cycleLetter('M15')">а</div>
+            <input type="hidden" id="M15-hidden" name="M15" value="а">
+            </div>
+            <div>
+            <label for="M16">M16:</label>
+            <div id="M16" class="clickable-box" onclick="cycleLetter('M16')">а</div>
+            <input type="hidden" id="M16-hidden" name="M16" value="а">
+            </div>
+            <div>
+            <label for="M17">M17:</label>
+            <div id="M17" class="clickable-box" onclick="cycleLetter('M17')">а</div>
+            <input type="hidden" id="M17-hidden" name="M17" value="а">
+            </div>
+            <div>
+            <label for="M18">M18:</label>
+            <div id="M18" class="clickable-box" onclick="cycleLetter('M18')">а</div>
+            <input type="hidden" id="M18-hidden" name="M18" value="а">
+            </div>
+            <div>
+            <label for="M19">M19:</label>
+            <div id="M19" class="clickable-box" onclick="cycleLetter('M19')">а</div>
+            <input type="hidden" id="M19-hidden" name="M19" value="а">
+            </div>
+            <div>
+            <label for="M20">M20:</label>
+            <div id="M20" class="clickable-box" onclick="cycleLetter('M20')">а</div>
+            <input type="hidden" id="M20-hidden" name="M20" value="а">
+            </div>
+            <div>
+            <label for="M21">M21:</label>
+            <div id="M21" class="clickable-box" onclick="cycleLetter('M21')">а</div>
+            <input type="hidden" id="M21-hidden" name="M21" value="а">
+            </div>
+            <div>
+            <label for="M22">M22:</label>
+            <div id="M22" class="clickable-box" onclick="cycleLetter('M22')">а</div>
+            <input type="hidden" id="M22-hidden" name="M22" value="а">
+            </div>
+            <div>
+            <label for="M23">M23:</label>
+            <div id="M23" class="clickable-box" onclick="cycleLetter('M23')">а</div>
+            <input type="hidden" id="M23-hidden" name="M23" value="а">
+            </div>
+            <div>
+            <label for="M24">M24:</label>
+            <div id="M24" class="clickable-box" onclick="cycleLetter('M24')">а</div>
+            <input type="hidden" id="M24-hidden" name="M24" value="а">
+            </div>
+            <div>
+            <label for="M25">M25:</label>
+            <div id="M25" class="clickable-box" onclick="cycleLetter('M25')">а</div>
+            <input type="hidden" id="M25-hidden" name="M25" value="а">
+            </div>
+            <div>
+            <label for="M26">M26:</label>
+            <div id="M26" class="clickable-box" onclick="cycleLetter('M26')">а</div>
+            <input type="hidden" id="M26-hidden" name="M26" value="а">
+            </div>
+            <div>
+            <label for="M27">M27:</label>
+            <div id="M27" class="clickable-box" onclick="cycleLetter('M27')">а</div>
+            <input type="hidden" id="M27-hidden" name="M27" value="а">
+            </div>
+            <div>
+            <label for="M28">M28:</label>
+            <div id="M28" class="clickable-box" onclick="cycleLetter('M28')">а</div>
+            <input type="hidden" id="M28-hidden" name="M28" value="а">
+            </div>
+            <div>
+            <label for="M29">M29:</label>
+            <div id="M29" class="clickable-box" onclick="cycleLetter('M29')">а</div>
+            <input type="hidden" id="M29-hidden" name="M29" value="а">
+            </div>
+            <div>
+                <label for="M30">M30:</label>
+                <div id="M30" class="clickable-box" onclick="cycleLetter('M30')">а</div>
+                <input type="hidden" id="M30-hidden" name="M30" value="а">
+            </div>
+            <div>
+                <label for="M31">M31:</label>
+                <div id="M31" class="clickable-box" onclick="cycleLetter2('M31')">а</div>
+                <input type="hidden" id="M31-hidden" name="M31" value="а">
+            </div>
+            <div>
+            <label for="M32">M32:</label>
+            <div id="M32" class="clickable-box" onclick="cycleLetter2('M32')">а</div>
+            <input type="hidden" id="M32-hidden" name="M32" value="а">
+            </div>
+            <div>
+            <label for="M33">M33:</label>
+            <div id="M33" class="clickable-box" onclick="cycleLetter2('M33')">а</div>
+            <input type="hidden" id="M33-hidden" name="M33" value="а">
+            </div>
+            <div>
+            <label for="M34">M34:</label>
+            <div id="M34" class="clickable-box" onclick="cycleLetter2('M34')">а</div>
+            <input type="hidden" id="M34-hidden" name="M34" value="а">
+            </div>
+            <div>
+            <label for="M35">M35:</label>
+            <div id="M35" class="clickable-box" onclick="cycleLetter2('M35')">а</div>
+            <input type="hidden" id="M35-hidden" name="M35" value="а">
+            </div>
+            <div>
+            <label for="M36">M36:</label>
+            <div id="M36" class="clickable-box" onclick="cycleLetter2('M36')">а</div>
+            <input type="hidden" id="M36-hidden" name="M36" value="а">
+            </div>
+            <div>
+            <label for="M37">M37:</label>
+            <div id="M37" class="clickable-box" onclick="cycleLetter2('M37')">а</div>
+            <input type="hidden" id="M37-hidden" name="M37" value="а">
+            </div>
+            <div>
+            <label for="M38">M38:</label>
+            <div id="M38" class="clickable-box" onclick="cycleLetter2('M38')">а</div>
+            <input type="hidden" id="M38-hidden" name="M38" value="а">
+            </div>
+            <div>
+            <label for="M39">M39:</label>
+            <div id="M39" class="clickable-box" onclick="cycleLetter2('M39')">а</div>
+            <input type="hidden" id="M39-hidden" name="M39" value="а">
+            </div>
+            <div>
+            <label for="M40">M40:</label>
+            <div id="M40" class="clickable-box" onclick="cycleLetter2('M40')">а</div>
+            <input type="hidden" id="M40-hidden" name="M40" value="а">
+            </div>
+            <div>
+            <label for="M41">M41:</label>
+            <div id="M41" class="clickable-box" onclick="cycleLetter2('M41')">а</div>
+            <input type="hidden" id="M41-hidden" name="M41" value="а">
+            </div>
+            <div>
+            <label for="M42">M42:</label>
+            <div id="M42" class="clickable-box" onclick="cycleLetter2('M42')">а</div>
+            <input type="hidden" id="M42-hidden" name="M42" value="а">
+            </div>
+            <div>
+            <label for="M43">M43:</label>
+            <div id="M43" class="clickable-box" onclick="cycleLetter2('M43')">а</div>
+            <input type="hidden" id="M43-hidden" name="M43" value="а">
+            </div>
+            <div>
+            <label for="M44">M44:</label>
+            <div id="M44" class="clickable-box" onclick="cycleLetter2('M44')">а</div>
+            <input type="hidden" id="M44-hidden" name="M44" value="а">
+            </div>
+            <div>
+            <label for="M45">M45:</label>
+            <div id="M45" class="clickable-box" onclick="cycleLetter2('M45')">а</div>
+            <input type="hidden" id="M45-hidden" name="M45" value="а">
+            </div>
+            <div>
+            <label for="M46">M46:</label>
+            <div id="M46" class="clickable-box" onclick="cycleLetter2('M46')">а</div>
+            <input type="hidden" id="M46-hidden" name="M46" value="а">
+            </div>
+            <div>
+            <label for="M47">M47:</label>
+            <div id="M47" class="clickable-box" onclick="cycleLetter2('M47')">а</div>
+            <input type="hidden" id="M47-hidden" name="M47" value="а">
+            </div>
+            <div>
+            <label for="M48">M48:</label>
+            <div id="M48" class="clickable-box" onclick="cycleLetter2('M48')">а</div>
+            <input type="hidden" id="M48-hidden" name="M48" value="а">
+            </div>
+            <div>
+            <label for="M49">M49:</label>
+            <div id="M49" class="clickable-box" onclick="cycleLetter2('M49')">а</div>
+            <input type="hidden" id="M49-hidden" name="M49" value="а">
+            </div>
+            <div>
+            <label for="M50">M50:</label>
+            <div id="M50" class="clickable-box" onclick="cycleLetter2('M50')">а</div>
+            <input type="hidden" id="M50-hidden" name="M50" value="а">
+            </div>
+            <div>
+            <label for="M51">M51:</label>
+            <div id="M51" class="clickable-box" onclick="cycleLetter2('M51')">а</div>
+            <input type="hidden" id="M51-hidden" name="M51" value="а">
+            </div>
+            <div>
+            <label for="M52">M52:</label>
+            <div id="M52" class="clickable-box" onclick="cycleLetter2('M52')">а</div>
+            <input type="hidden" id="M52-hidden" name="M52" value="а">
+            </div>
+            <div>
+            <label for="M53">M53:</label>
+            <div id="M53" class="clickable-box" onclick="cycleLetter2('M53')">а</div>
+            <input type="hidden" id="M53-hidden" name="M53" value="а">
+            </div>
+            <div>
+            <label for="M54">M54:</label>
+            <div id="M54" class="clickable-box" onclick="cycleLetter2('M54')">а</div>
+            <input type="hidden" id="M54-hidden" name="M54" value="а">
+            </div>
+            <div>
+            <label for="M55">M55:</label>
+            <div id="M55" class="clickable-box" onclick="cycleLetter2('M55')">а</div>
+            <input type="hidden" id="M55-hidden" name="M55" value="а">
+            </div>
+            <div>
+            <label for="M56">M56:</label>
+            <div id="M56" class="clickable-box" onclick="cycleLetter2('M56')">а</div>
+            <input type="hidden" id="M56-hidden" name="M56" value="а">
+            </div>
+            <div>
+            <label for="M57">M57:</label>
+            <div id="M57" class="clickable-box" onclick="cycleLetter2('M57')">а</div>
+            <input type="hidden" id="M57-hidden" name="M57" value="а">
+            </div>
+            <div>
+            <label for="M58">M58:</label>
+            <div id="M58" class="clickable-box" onclick="cycleLetter2('M58')">а</div>
+            <input type="hidden" id="M58-hidden" name="M58" value="а">
+            </div>
+            <div>
+            <label for="M59">M59:</label>
+            <div id="M59" class="clickable-box" onclick="cycleLetter2('M59')">а</div>
+            <input type="hidden" id="M59-hidden" name="M59" value="а">
+            </div>
+            <div>
+            <label for="M60">M60:</label>
+            <div id="M60" class="clickable-box" onclick="cycleLetter2('M60')">а</div>
+            <input type="hidden" id="M60-hidden" name="M60" value="а">
+            </div>
+            <div>
+                <label for="A1">A1:</label>
+                <div id="A1" class="clickable-box" onclick="cycleLetter('A1')">а</div>
+                <input type="hidden" id="A1-hidden" name="A1" value="а">
+            </div>
+            <div>
+            <label for="A2">A2:</label>
+            <div id="A2" class="clickable-box" onclick="cycleLetter('A2')">а</div>
+            <input type="hidden" id="A2-hidden" name="A2" value="а">
+            </div>
+            <div>
+            <label for="A3">A3:</label>
+            <div id="A3" class="clickable-box" onclick="cycleLetter('A3')">а</div>
+            <input type="hidden" id="A3-hidden" name="A3" value="а">
+            </div>
+            <div>
+            <label for="A4">A4:</label>
+            <div id="A4" class="clickable-box" onclick="cycleLetter('A4')">а</div>
+            <input type="hidden" id="A4-hidden" name="A4" value="а">
+            </div>
+            <div>
+            <label for="A5">A5:</label>
+            <div id="A5" class="clickable-box" onclick="cycleLetter('A5')">а</div>
+            <input type="hidden" id="A5-hidden" name="A5" value="а">
+            </div>
+            <div>
+            <label for="A6">A6:</label>
+            <div id="A6" class="clickable-box" onclick="cycleLetter('A6')">а</div>
+            <input type="hidden" id="A6-hidden" name="A6" value="а">
+            </div>
+            <div>
+            <label for="A7">A7:</label>
+            <div id="A7" class="clickable-box" onclick="cycleLetter('A7')">а</div>
+            <input type="hidden" id="A7-hidden" name="A7" value="а">
+            </div>
+            <div>
+            <label for="A8">A8:</label>
+            <div id="A8" class="clickable-box" onclick="cycleLetter('A8')">а</div>
+            <input type="hidden" id="A8-hidden" name="A8" value="а">
+            </div>
+            <div>
+            <label for="A9">A9:</label>
+            <div id="A9" class="clickable-box" onclick="cycleLetter('A9')">а</div>
+            <input type="hidden" id="A9-hidden" name="A9" value="а">
+            </div>
+            <div>
+            <label for="A10">A10:</label>
+            <div id="A10" class="clickable-box" onclick="cycleLetter('A10')">а</div>
+            <input type="hidden" id="A10-hidden" name="A10" value="а">
+            </div>
+            <div>
+            <label for="A11">A11:</label>
+            <div id="A11" class="clickable-box" onclick="cycleLetter('A11')">а</div>
+            <input type="hidden" id="A11-hidden" name="A11" value="а">
+            </div>
+            <div>
+            <label for="A12">A12:</label>
+            <div id="A12" class="clickable-box" onclick="cycleLetter('A12')">а</div>
+            <input type="hidden" id="A12-hidden" name="A12" value="а">
+            </div>
+            <div>
+            <label for="A13">A13:</label>
+            <div id="A13" class="clickable-box" onclick="cycleLetter('A13')">а</div>
+            <input type="hidden" id="A13-hidden" name="A13" value="а">
+            </div>
+            <div>
+            <label for="A14">A14:</label>
+            <div id="A14" class="clickable-box" onclick="cycleLetter('A14')">а</div>
+            <input type="hidden" id="A14-hidden" name="A14" value="а">
+            </div>
+            <div>
+            <label for="A15">A15:</label>
+            <div id="A15" class="clickable-box" onclick="cycleLetter('A15')">а</div>
+            <input type="hidden" id="A15-hidden" name="A15" value="а">
+            </div>
+            <div>
+            <label for="A16">A16:</label>
+            <div id="A16" class="clickable-box" onclick="cycleLetter('A16')">а</div>
+            <input type="hidden" id="A16-hidden" name="A16" value="а">
+            </div>
+            <div>
+            <label for="A17">A17:</label>
+            <div id="A17" class="clickable-box" onclick="cycleLetter('A17')">а</div>
+            <input type="hidden" id="A17-hidden" name="A17" value="а">
+            </div>
+            <div>
+            <label for="A18">A18:</label>
+            <div id="A18" class="clickable-box" onclick="cycleLetter('A18')">а</div>
+            <input type="hidden" id="A18-hidden" name="A18" value="а">
+            </div>
+            <div>
+            <label for="A19">A19:</label>
+            <div id="A19" class="clickable-box" onclick="cycleLetter('A19')">а</div>
+            <input type="hidden" id="A19-hidden" name="A19" value="а">
+            </div>
+            <div>
+            <label for="A20">A20:</label>
+            <div id="A20" class="clickable-box" onclick="cycleLetter('A20')">а</div>
+            <input type="hidden" id="A20-hidden" name="A20" value="а">
+            </div>
+            <div>
+            <label for="A21">A21:</label>
+            <div id="A21" class="clickable-box" onclick="cycleLetter('A21')">а</div>
+            <input type="hidden" id="A21-hidden" name="A21" value="а">
+            </div>
+            <div>
+            <label for="A22">A22:</label>
+            <div id="A22" class="clickable-box" onclick="cycleLetter('A22')">а</div>
+            <input type="hidden" id="A22-hidden" name="A22" value="а">
+            </div>
+            <div>
+            <label for="A23">A23:</label>
+            <div id="A23" class="clickable-box" onclick="cycleLetter('A23')">а</div>
+            <input type="hidden" id="A23-hidden" name="A23" value="а">
+            </div>
+            <div>
+            <label for="A24">A24:</label>
+            <div id="A24" class="clickable-box" onclick="cycleLetter('A24')">а</div>
+            <input type="hidden" id="A24-hidden" name="A24" value="а">
+            </div>
+            <div>
+            <label for="A25">A25:</label>
+            <div id="A25" class="clickable-box" onclick="cycleLetter('A25')">а</div>
+            <input type="hidden" id="A25-hidden" name="A25" value="а">
+            </div>
+            <div>
+            <label for="A26">A26:</label>
+            <div id="A26" class="clickable-box" onclick="cycleLetter('A26')">а</div>
+            <input type="hidden" id="A26-hidden" name="A26" value="а">
+            </div>
+            <div>
+            <label for="A27">A27:</label>
+            <div id="A27" class="clickable-box" onclick="cycleLetter('A27')">а</div>
+            <input type="hidden" id="A27-hidden" name="A27" value="а">
+            </div>
+            <div>
+            <label for="A28">A28:</label>
+            <div id="A28" class="clickable-box" onclick="cycleLetter('A28')">а</div>
+            <input type="hidden" id="A28-hidden" name="A28" value="а">
+            </div>
+            <div>
+            <label for="A29">A29:</label>
+            <div id="A29" class="clickable-box" onclick="cycleLetter('A29')">а</div>
+            <input type="hidden" id="A29-hidden" name="A29" value="а">
+            </div>
+            <div>
+            <label for="A30">A30:</label>
+            <div id="A30" class="clickable-box" onclick="cycleLetter('A30')">а</div>
+            <input type="hidden" id="A30-hidden" name="A30" value="а">
+            </div>
+            <div>
+                <label for="R1">R1:</label>
+                <div id="R1" class="clickable-box" onclick="cycleLetter('R1')">а</div>
+                <input type="hidden" id="R1-hidden" name="R1" value="а">
+            </div>
+            <div>
+            <label for="R2">R2:</label>
+            <div id="R2" class="clickable-box" onclick="cycleLetter('R2')">а</div>
+            <input type="hidden" id="R2-hidden" name="R2" value="а">
+            </div>
+            <div>
+            <label for="R3">R3:</label>
+            <div id="R3" class="clickable-box" onclick="cycleLetter('R3')">а</div>
+            <input type="hidden" id="R3-hidden" name="R3" value="а">
+            </div>
+            <div>
+            <label for="R4">R4:</label>
+            <div id="R4" class="clickable-box" onclick="cycleLetter('R4')">а</div>
+            <input type="hidden" id="R4-hidden" name="R4" value="а">
+            </div>
+            <div>
+            <label for="R5">R5:</label>
+            <div id="R5" class="clickable-box" onclick="cycleLetter('R5')">а</div>
+            <input type="hidden" id="R5-hidden" name="R5" value="а">
+            </div>
+            <div>
+            <label for="R6">R6:</label>
+            <div id="R6" class="clickable-box" onclick="cycleLetter('R6')">а</div>
+            <input type="hidden" id="R6-hidden" name="R6" value="а">
+            </div>
+            <div>
+            <label for="R7">R7:</label>
+            <div id="R7" class="clickable-box" onclick="cycleLetter('R7')">а</div>
+            <input type="hidden" id="R7-hidden" name="R7" value="а">
+            </div>
+            <div>
+            <label for="R8">R8:</label>
+            <div id="R8" class="clickable-box" onclick="cycleLetter('R8')">а</div>
+            <input type="hidden" id="R8-hidden" name="R8" value="а">
+            </div>
+            <div>
+            <label for="R9">R9:</label>
+            <div id="R9" class="clickable-box" onclick="cycleLetter('R9')">а</div>
+            <input type="hidden" id="R9-hidden" name="R9" value="а">
+            </div>
+            <div>
+            <label for="R10">R10:</label>
+            <div id="R10" class="clickable-box" onclick="cycleLetter('R10')">а</div>
+            <input type="hidden" id="R10-hidden" name="R10" value="а">
+            </div>
+            <div>
+            <label for="R11">R11:</label>
+            <div id="R11" class="clickable-box" onclick="cycleLetter('R11')">а</div>
+            <input type="hidden" id="R11-hidden" name="R11" value="а">
+            </div>
+            <div>
+            <label for="R12">R12:</label>
+            <div id="R12" class="clickable-box" onclick="cycleLetter('R12')">а</div>
+            <input type="hidden" id="R12-hidden" name="R12" value="а">
+            </div>
+            <div>
+            <label for="R13">R13:</label>
+            <div id="R13" class="clickable-box" onclick="cycleLetter('R13')">а</div>
+            <input type="hidden" id="R13-hidden" name="R13" value="а">
+            </div>
+            <div>
+            <label for="R14">R14:</label>
+            <div id="R14" class="clickable-box" onclick="cycleLetter('R14')">а</div>
+            <input type="hidden" id="R14-hidden" name="R14" value="а">
+            </div>
+            <div>
+            <label for="R15">R15:</label>
+            <div id="R15" class="clickable-box" onclick="cycleLetter('R15')">а</div>
+            <input type="hidden" id="R15-hidden" name="R15" value="а">
+            </div>
+            <div>
+            <label for="R16">R16:</label>
+            <div id="R16" class="clickable-box" onclick="cycleLetter('R16')">а</div>
+            <input type="hidden" id="R16-hidden" name="R16" value="а">
+            </div>
+            <div>
+            <label for="R17">R17:</label>
+            <div id="R17" class="clickable-box" onclick="cycleLetter('R17')">а</div>
+            <input type="hidden" id="R17-hidden" name="R17" value="а">
+            </div>
+            <div>
+            <label for="R18">R18:</label>
+            <div id="R18" class="clickable-box" onclick="cycleLetter('R18')">а</div>
+            <input type="hidden" id="R18-hidden" name="R18" value="а">
+            </div>
+            <div>
+            <label for="R19">R19:</label>
+            <div id="R19" class="clickable-box" onclick="cycleLetter('R19')">а</div>
+            <input type="hidden" id="R19-hidden" name="R19" value="а">
+            </div>
+            <div>
+            <label for="R20">R20:</label>
+            <div id="R20" class="clickable-box" onclick="cycleLetter('R20')">а</div>
+            <input type="hidden" id="R20-hidden" name="R20" value="а">
+            </div>
+            <div>
+            <label for="R21">R21:</label>
+            <div id="R21" class="clickable-box" onclick="cycleLetter('R21')">а</div>
+            <input type="hidden" id="R21-hidden" name="R21" value="а">
+            </div>
+            <div>
+            <label for="R22">R22:</label>
+            <div id="R22" class="clickable-box" onclick="cycleLetter('R22')">а</div>
+            <input type="hidden" id="R22-hidden" name="R22" value="а">
+            </div>
+            <div>
+            <label for="R23">R23:</label>
+            <div id="R23" class="clickable-box" onclick="cycleLetter('R23')">а</div>
+            <input type="hidden" id="R23-hidden" name="R23" value="а">
+            </div>
+            <div>
+            <label for="R24">R24:</label>
+            <div id="R24" class="clickable-box" onclick="cycleLetter('R24')">а</div>
+            <input type="hidden" id="R24-hidden" name="R24" value="а">
+            </div>
+            <div>
+            <label for="R25">R25:</label>
+            <div id="R25" class="clickable-box" onclick="cycleLetter('R25')">а</div>
+            <input type="hidden" id="R25-hidden" name="R25" value="а">
+            </div>
+            <div>
+            <label for="R26">R26:</label>
+            <div id="R26" class="clickable-box" onclick="cycleLetter('R26')">а</div>
+            <input type="hidden" id="R26-hidden" name="R26" value="а">
+            </div>
+            <div>
+            <label for="R27">R27:</label>
+            <div id="R27" class="clickable-box" onclick="cycleLetter('R27')">а</div>
+            <input type="hidden" id="R27-hidden" name="R27" value="а">
+            </div>
+            <div>
+            <label for="R28">R28:</label>
+            <div id="R28" class="clickable-box" onclick="cycleLetter('R28')">а</div>
+            <input type="hidden" id="R28-hidden" name="R28" value="а">
+            </div>
+            <div>
+            <label for="R29">R29:</label>
+            <div id="R29" class="clickable-box" onclick="cycleLetter('R29')">а</div>
+            <input type="hidden" id="R29-hidden" name="R29" value="а">
+            </div>
+            <div>
+            <label for="R30">R30:</label>
+            <div id="R30" class="clickable-box" onclick="cycleLetter('R30')">а</div>
+            <input type="hidden" id="R30-hidden" name="R30" value="а">
+            </div>
+            <div>
+                <label for="G1">G1:</label>
+                <div id="G1" class="clickable-box" onclick="cycleLetter('G1')">а</div>
+                <input type="hidden" id="G1-hidden" name="G1" value="а">
+            </div>
+            <div>
+            <label for="G2">G2:</label>
+            <div id="G2" class="clickable-box" onclick="cycleLetter('G2')">а</div>
+            <input type="hidden" id="G2-hidden" name="G2" value="а">
+            </div>
+            <div>
+            <label for="G3">G3:</label>
+            <div id="G3" class="clickable-box" onclick="cycleLetter('G3')">а</div>
+            <input type="hidden" id="G3-hidden" name="G3" value="а">
+            </div>
+            <div>
+            <label for="G4">G4:</label>
+            <div id="G4" class="clickable-box" onclick="cycleLetter('G4')">а</div>
+            <input type="hidden" id="G4-hidden" name="G4" value="а">
+            </div>
+            <div>
+            <label for="G5">G5:</label>
+            <div id="G5" class="clickable-box" onclick="cycleLetter('G5')">а</div>
+            <input type="hidden" id="G5-hidden" name="G5" value="а">
+            </div>
+            <div>
+            <label for="G6">G6:</label>
+            <div id="G6" class="clickable-box" onclick="cycleLetter('G6')">а</div>
+            <input type="hidden" id="G6-hidden" name="G6" value="а">
+            </div>
+            <div>
+            <label for="G7">G7:</label>
+            <div id="G7" class="clickable-box" onclick="cycleLetter('G7')">а</div>
+            <input type="hidden" id="G7-hidden" name="G7" value="а">
+            </div>
+            <div>
+            <label for="G8">G8:</label>
+            <div id="G8" class="clickable-box" onclick="cycleLetter('G8')">а</div>
+            <input type="hidden" id="G8-hidden" name="G8" value="а">
+            </div>
+            <div>
+            <label for="G9">G9:</label>
+            <div id="G9" class="clickable-box" onclick="cycleLetter('G9')">а</div>
+            <input type="hidden" id="G9-hidden" name="G9" value="а">
+            </div>
+            <div>
+            <label for="G10">G10:</label>
+            <div id="G10" class="clickable-box" onclick="cycleLetter('G10')">а</div>
+            <input type="hidden" id="G10-hidden" name="G10" value="а">
+            </div>
+            <div>
+            <label for="G11">G11:</label>
+            <div id="G11" class="clickable-box" onclick="cycleLetter('G11')">а</div>
+            <input type="hidden" id="G11-hidden" name="G11" value="а">
+            </div>
+            <div>
+            <label for="G12">G12:</label>
+            <div id="G12" class="clickable-box" onclick="cycleLetter('G12')">а</div>
+            <input type="hidden" id="G12-hidden" name="G12" value="а">
+            </div>
+            <div>
+            <label for="G13">G13:</label>
+            <div id="G13" class="clickable-box" onclick="cycleLetter('G13')">а</div>
+            <input type="hidden" id="G13-hidden" name="G13" value="а">
+            </div>
+            <div>
+            <label for="G14">G14:</label>
+            <div id="G14" class="clickable-box" onclick="cycleLetter('G14')">а</div>
+            <input type="hidden" id="G14-hidden" name="G14" value="а">
+            </div>
+            <div>
+            <label for="G15">G15:</label>
+            <div id="G15" class="clickable-box" onclick="cycleLetter('G15')">а</div>
+            <input type="hidden" id="G15-hidden" name="G15" value="а">
+            </div>
+            <div>
+            <label for="G16">G16:</label>
+            <div id="G16" class="clickable-box" onclick="cycleLetter('G16')">а</div>
+            <input type="hidden" id="G16-hidden" name="G16" value="а">
+            </div>
+            <div>
+            <label for="G17">G17:</label>
+            <div id="G17" class="clickable-box" onclick="cycleLetter('G17')">а</div>
+            <input type="hidden" id="G17-hidden" name="G17" value="а">
+            </div>
+            <div>
+            <label for="G18">G18:</label>
+            <div id="G18" class="clickable-box" onclick="cycleLetter('G18')">а</div>
+            <input type="hidden" id="G18-hidden" name="G18" value="а">
+            </div>
+            <div>
+            <label for="G19">G19:</label>
+            <div id="G19" class="clickable-box" onclick="cycleLetter('G19')">а</div>
+            <input type="hidden" id="G19-hidden" name="G19" value="а">
+            </div>
+            <div>
+            <label for="G20">G20:</label>
+            <div id="G20" class="clickable-box" onclick="cycleLetter('G20')">а</div>
+            <input type="hidden" id="G20-hidden" name="G20" value="а">
+            </div>
+            <div>
+            <label for="G21">G21:</label>
+            <div id="G21" class="clickable-box" onclick="cycleLetter('G21')">а</div>
+            <input type="hidden" id="G21-hidden" name="G21" value="а">
+            </div>
+            <div>
+            <label for="G22">G22:</label>
+            <div id="G22" class="clickable-box" onclick="cycleLetter('G22')">а</div>
+            <input type="hidden" id="G22-hidden" name="G22" value="а">
+            </div>
+            <div>
+            <label for="G23">G23:</label>
+            <div id="G23" class="clickable-box" onclick="cycleLetter('G23')">а</div>
+            <input type="hidden" id="G23-hidden" name="G23" value="а">
+            </div>
+            <div>
+            <label for="G24">G24:</label>
+            <div id="G24" class="clickable-box" onclick="cycleLetter('G24')">а</div>
+            <input type="hidden" id="G24-hidden" name="G24" value="а">
+            </div>
+            <div>
+            <label for="G25">G25:</label>
+            <div id="G25" class="clickable-box" onclick="cycleLetter('G25')">а</div>
+            <input type="hidden" id="G25-hidden" name="G25" value="а">
+            </div>
+            <div>
+            <label for="G26">G26:</label>
+            <div id="G26" class="clickable-box" onclick="cycleLetter('G26')">а</div>
+            <input type="hidden" id="G26-hidden" name="G26" value="а">
+            </div>
+            <div>
+            <label for="G27">G27:</label>
+            <div id="G27" class="clickable-box" onclick="cycleLetter('G27')">а</div>
+            <input type="hidden" id="G27-hidden" name="G27" value="а">
+            </div>
+            <div>
+            <label for="G28">G28:</label>
+            <div id="G28" class="clickable-box" onclick="cycleLetter('G28')">а</div>
+            <input type="hidden" id="G28-hidden" name="G28" value="а">
+            </div>
+            <div>
+            <label for="G29">G29:</label>
+            <div id="G29" class="clickable-box" onclick="cycleLetter('G29')">а</div>
+            <input type="hidden" id="G29-hidden" name="G29" value="а">
+            </div>
+            <div>
+            <label for="G30">G30:</label>
+            <div id="G30" class="clickable-box" onclick="cycleLetter('G30')">а</div>
+            <input type="hidden" id="G30-hidden" name="G30" value="а">
+            </div>
+
+            <label for="photos">Upload Photos:</label>
+            <input type="file" id="photos" name="photos" multiple accept="image/*" style="display:none">
+            <button type="button" id="select-photos-btn">Select Photos</button>
+            <div id="photo-preview-container"></div>
+            
+            <button type="submit">✔️ Save</button>
+            <button type="button" onclick="window.location.href='archive.html'">❌ Exit</button>
+        </form>
+    </main>
+
+    <script>
+        const filesToUpload      = [];
+        const photosInput        = document.getElementById('photos');
+        const selectPhotosBtn    = document.getElementById('select-photos-btn');
+        const previewContainer   = document.getElementById('photo-preview-container');
+        const letters = ['а', 'б', 'в', 'г'];
+        const letters2 = ['а', 'б', 'в', 'г', 'д'];
+
+        selectPhotosBtn.addEventListener('click', () => photosInput.click());                                    // :contentReference[oaicite:16]{index=16}
+        photosInput.addEventListener('change', e => {
+        for (let file of Array.from(e.target.files)) filesToUpload.push(file);                                  // :contentReference[oaicite:17]{index=17}
+        e.target.value = null; updatePhotoPreview();                                                           // :contentReference[oaicite:18]{index=18}
+        });
+
+        function updatePhotoPreview() {
+        previewContainer.innerHTML = '';
+        filesToUpload.forEach((file, idx) => {
+            const reader = new FileReader();
+            reader.onload = ev => {
+            const d = document.createElement('div');
+            d.className = 'photo-thumb';
+            d.innerHTML = `
+                <img src="${ev.target.result}" width="300" alt="${file.name}">
+                <button type="button" data-idx="${idx}">X</button>
+            `;
+            previewContainer.appendChild(d);
+            };
+            reader.readAsDataURL(file);
+        });
+        }
+
+
+        previewContainer.addEventListener('click', e => {
+        if (e.target.tagName==='BUTTON') {
+            const i = +e.target.dataset.idx;
+            filesToUpload.splice(i, 1); updatePhotoPreview();                                                      // :contentReference[oaicite:20]{index=20}
+        }
+        });
+
+        function cycleLetter(id) {
+            const div = document.getElementById(id);
+            const hiddenInput = document.getElementById(`${id}-hidden`);
+            let currentLetter = div.textContent;
+            let currentIndex = letters.indexOf(currentLetter);
+            let nextIndex = (currentIndex + 1) % letters.length;
+            div.textContent = letters[nextIndex];
+            hiddenInput.value = letters[nextIndex];
+        }
+        function cycleLetter2(id) {
+            const div = document.getElementById(id);
+            const hiddenInput = document.getElementById(`${id}-hidden`);
+            let currentLetter = div.textContent;
+            let currentIndex = letters2.indexOf(currentLetter);
+            let nextIndex = (currentIndex + 1) % letters2.length;
+            div.textContent = letters2[nextIndex];
+            hiddenInput.value = letters2[nextIndex];
+        }
+        const urlParams = new URLSearchParams(window.location.search);
+        // const variant = urlParams.get('variant');
+        // const apiUrl = `http://localhost:8000/test/${variant}`; // Adjust the URL to match your FastAPI server
+
+        document.getElementById('edit-test-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const test = {
+                variant: document.getElementById('variant').value,
+                M1: document.getElementById('M1-hidden').value,
+                M2: document.getElementById('M2-hidden').value,
+                M3: document.getElementById('M3-hidden').value,
+                M4: document.getElementById('M4-hidden').value,
+                M5: document.getElementById('M5-hidden').value,
+                M6: document.getElementById('M6-hidden').value,
+                M7: document.getElementById('M7-hidden').value,
+                M8: document.getElementById('M8-hidden').value,
+                M9: document.getElementById('M9-hidden').value,
+                M10: document.getElementById('M10-hidden').value,
+                M11: document.getElementById('M11-hidden').value,
+                M12: document.getElementById('M12-hidden').value,
+                M13: document.getElementById('M13-hidden').value,
+                M14: document.getElementById('M14-hidden').value,
+                M15: document.getElementById('M15-hidden').value,
+                M16: document.getElementById('M16-hidden').value,
+                M17: document.getElementById('M17-hidden').value,
+                M18: document.getElementById('M18-hidden').value,
+                M19: document.getElementById('M19-hidden').value,
+                M20: document.getElementById('M20-hidden').value,
+                M21: document.getElementById('M21-hidden').value,
+                M22: document.getElementById('M22-hidden').value,
+                M23: document.getElementById('M23-hidden').value,
+                M24: document.getElementById('M24-hidden').value,
+                M25: document.getElementById('M25-hidden').value,
+                M26: document.getElementById('M26-hidden').value,
+                M27: document.getElementById('M27-hidden').value,
+                M28: document.getElementById('M28-hidden').value,
+                M29: document.getElementById('M29-hidden').value,
+                M30: document.getElementById('M30-hidden').value,
+                M31: document.getElementById('M31-hidden').value,
+                M32: document.getElementById('M32-hidden').value,
+                M33: document.getElementById('M33-hidden').value,
+                M34: document.getElementById('M34-hidden').value,
+                M35: document.getElementById('M35-hidden').value,
+                M36: document.getElementById('M36-hidden').value,
+                M37: document.getElementById('M37-hidden').value,
+                M38: document.getElementById('M38-hidden').value,
+                M39: document.getElementById('M39-hidden').value,
+                M40: document.getElementById('M40-hidden').value,
+                M41: document.getElementById('M41-hidden').value,
+                M42: document.getElementById('M42-hidden').value,
+                M43: document.getElementById('M43-hidden').value,
+                M44: document.getElementById('M44-hidden').value,
+                M45: document.getElementById('M45-hidden').value,
+                M46: document.getElementById('M46-hidden').value,
+                M47: document.getElementById('M47-hidden').value,
+                M48: document.getElementById('M48-hidden').value,
+                M49: document.getElementById('M49-hidden').value,
+                M50: document.getElementById('M50-hidden').value,
+                M51: document.getElementById('M51-hidden').value,
+                M52: document.getElementById('M52-hidden').value,
+                M53: document.getElementById('M53-hidden').value,
+                M54: document.getElementById('M54-hidden').value,
+                M55: document.getElementById('M55-hidden').value,
+                M56: document.getElementById('M56-hidden').value,
+                M57: document.getElementById('M57-hidden').value,
+                M58: document.getElementById('M58-hidden').value,
+                M59: document.getElementById('M59-hidden').value,
+                M60: document.getElementById('M60-hidden').value,
+                A1: document.getElementById('A1-hidden').value,
+                A2: document.getElementById('A2-hidden').value,
+                A3: document.getElementById('A3-hidden').value,
+                A4: document.getElementById('A4-hidden').value,
+                A5: document.getElementById('A5-hidden').value,
+                A6: document.getElementById('A6-hidden').value,
+                A7: document.getElementById('A7-hidden').value,
+                A8: document.getElementById('A8-hidden').value,
+                A9: document.getElementById('A9-hidden').value,
+                A10: document.getElementById('A10-hidden').value,
+                A11: document.getElementById('A11-hidden').value,
+                A12: document.getElementById('A12-hidden').value,
+                A13: document.getElementById('A13-hidden').value,
+                A14: document.getElementById('A14-hidden').value,
+                A15: document.getElementById('A15-hidden').value,
+                A16: document.getElementById('A16-hidden').value,
+                A17: document.getElementById('A17-hidden').value,
+                A18: document.getElementById('A18-hidden').value,
+                A19: document.getElementById('A19-hidden').value,
+                A20: document.getElementById('A20-hidden').value,
+                A21: document.getElementById('A21-hidden').value,
+                A22: document.getElementById('A22-hidden').value,
+                A23: document.getElementById('A23-hidden').value,
+                A24: document.getElementById('A24-hidden').value,
+                A25: document.getElementById('A25-hidden').value,
+                A26: document.getElementById('A26-hidden').value,
+                A27: document.getElementById('A27-hidden').value,
+                A28: document.getElementById('A28-hidden').value,
+                A29: document.getElementById('A29-hidden').value,
+                A30: document.getElementById('A30-hidden').value,
+                R1: document.getElementById('R1-hidden').value,
+                R2: document.getElementById('R2-hidden').value,
+                R3: document.getElementById('R3-hidden').value,
+                R4: document.getElementById('R4-hidden').value,
+                R5: document.getElementById('R5-hidden').value,
+                R6: document.getElementById('R6-hidden').value,
+                R7: document.getElementById('R7-hidden').value,
+                R8: document.getElementById('R8-hidden').value,
+                R9: document.getElementById('R9-hidden').value,
+                R10: document.getElementById('R10-hidden').value,
+                R11: document.getElementById('R11-hidden').value,
+                R12: document.getElementById('R12-hidden').value,
+                R13: document.getElementById('R13-hidden').value,
+                R14: document.getElementById('R14-hidden').value,
+                R15: document.getElementById('R15-hidden').value,
+                R16: document.getElementById('R16-hidden').value,
+                R17: document.getElementById('R17-hidden').value,
+                R18: document.getElementById('R18-hidden').value,
+                R19: document.getElementById('R19-hidden').value,
+                R20: document.getElementById('R20-hidden').value,
+                R21: document.getElementById('R21-hidden').value,
+                R22: document.getElementById('R22-hidden').value,
+                R23: document.getElementById('R23-hidden').value,
+                R24: document.getElementById('R24-hidden').value,
+                R25: document.getElementById('R25-hidden').value,
+                R26: document.getElementById('R26-hidden').value,
+                R27: document.getElementById('R27-hidden').value,
+                R28: document.getElementById('R28-hidden').value,
+                R29: document.getElementById('R29-hidden').value,
+                R30: document.getElementById('R30-hidden').value,
+                G1: document.getElementById('G1-hidden').value,
+                G2: document.getElementById('G2-hidden').value,
+                G3: document.getElementById('G3-hidden').value,
+                G4: document.getElementById('G4-hidden').value,
+                G5: document.getElementById('G5-hidden').value,
+                G6: document.getElementById('G6-hidden').value,
+                G7: document.getElementById('G7-hidden').value,
+                G8: document.getElementById('G8-hidden').value,
+                G9: document.getElementById('G9-hidden').value,
+                G10: document.getElementById('G10-hidden').value,
+                G11: document.getElementById('G11-hidden').value,
+                G12: document.getElementById('G12-hidden').value,
+                G13: document.getElementById('G13-hidden').value,
+                G14: document.getElementById('G14-hidden').value,
+                G15: document.getElementById('G15-hidden').value,
+                G16: document.getElementById('G16-hidden').value,
+                G17: document.getElementById('G17-hidden').value,
+                G18: document.getElementById('G18-hidden').value,
+                G19: document.getElementById('G19-hidden').value,
+                G20: document.getElementById('G20-hidden').value,
+                G21: document.getElementById('G21-hidden').value,
+                G22: document.getElementById('G22-hidden').value,
+                G23: document.getElementById('G23-hidden').value,
+                G24: document.getElementById('G24-hidden').value,
+                G25: document.getElementById('G25-hidden').value,
+                G26: document.getElementById('G26-hidden').value,
+                G27: document.getElementById('G27-hidden').value,
+                G28: document.getElementById('G28-hidden').value,
+                G29: document.getElementById('G29-hidden').value,
+                G30: document.getElementById('G30-hidden').value,
+            };
+            // 2) Build the FormData
+            const formData = new FormData();
+            
+            formData.append('test_json', JSON.stringify(test));
+            // photos is List[UploadFile]
+            filesToUpload.forEach(file => formData.append('photos', file));
+            try {
+                await fetch(`http://localhost:8000/test`, {
+                    method: 'POST',
+                    body: formData
+                });
+                window.location.href = 'archive.html'; // Redirect back to archive
+            } catch (error) {
+                console.error('Failed to save test:', error);
+            }
+        });
+    </script>
+    <style>
+        .clickable-box {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 20px;
+            cursor: pointer;
+            user-select: none; /* Prevent text selection */
+        }
+        div {
+            margin: 5px;
+        }
+    </style>
+</body>
+</html>

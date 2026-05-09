@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image + OMR Group Builder</title>
+  <link rel="stylesheet" href="style2.css">
+  <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+</head>
+<body>
+
+  <h2>Upload, Drag & Zoom Image + Add OMR Groups</h2>
+  <input type="file" id="imageInput" accept="image/*" />
+  <button id="addGroup">Add Question Group</button>
+  <button id="saveFrame">Save Frame</button>
+  <button id="loadFrameBtn">Load Frame</button>
+  <div class="tools">
+    <button id="bgMove" class="tool active"><box-icon name="chevron-right" color="#fff"></box-icon></button>
+    <button id="grpMove" class="tool"><box-icon name="chevron-right" color="#000"></box-icon></button>
+  </div>
+
+  <div class="preview-container">
+    <div id="dragWrapper">
+      <img id="imagePreview" alt="Image Preview" />
+    </div>
+  </div>
+
+  <!-- Modal for creating a new group -->
+  <div id="groupModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>New Question Group</h3>
+      <label>
+        Options:
+        <select id="optCount">
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+      <label>
+        Square size (px):
+        <input type="number" id="optSize" min="10" value="50"/>
+      </label>
+      <label>
+        Question #:
+        <input type="text" id="qNumber" />
+      </label>
+      <div class="modal-buttons">
+        <button id="cancelGroup" type="button">Cancel</button>
+        <button id="createGroup" type="button">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for loading a frame -->
+  <div id="loadModal" class="modal hidden">
+    <div class="modal-content">
+      <h3>Load Saved Frame</h3>
+      <select id="frameSelect"></select>
+      <div class="modal-buttons">
+        <button id="cancelLoad" type="button">Cancel</button>
+        <button id="confirmLoad" type="button">Load</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import {API_BASE} from "./variables.js";
+
+// — Elements —
+const imageInput   = document.getElementById('imageInput');
+const imagePreview = document.getElementById('imagePreview');
+const wrapper      = document.getElementById('dragWrapper');
+const addGroupBtn  = document.getElementById('addGroup');
+const saveFrameBtn = document.getElementById('saveFrame');
+const loadFrameBtn = document.getElementById('loadFrameBtn');
+const bgBtn        = document.getElementById('bgMove');
+const grpBtn       = document.getElementById('grpMove');
+
+const groupModal   = document.getElementById('groupModal');
+const optCount     = document.getElementById('optCount');
+const optSize      = document.getElementById('optSize');
+const qNumber      = document.getElementById('qNumber');
+const cancelGroup  = document.getElementById('cancelGroup');
+const createGroup  = document.getElementById('createGroup');
+
+const loadModal    = document.getElementById('loadModal');
+const frameSelect  = document.getElementById('frameSelect');
+const cancelLoad   = document.getElementById('cancelLoad');
+const confirmLoad  = document.getElementById('confirmLoad');
+
+// — State —
+let scale = 1, posX = 0, posY = 0;
+let startX, startY, isImgDragging = false;
+let mode = 'bg'; // 'bg' or 'grp'
+let lastSize = 50;
+let groups = [];
+
+// — IMAGE UPLOAD + DRAG + ZOOM —
+imageInput.addEventListener('change', () => {
+  const file = imageInput.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    imagePreview.src = reader.result;
+    imagePreview.style.display = 'block';
+    scale = 1; posX = 0; posY = 0;
+    groups = [];
+    wrapper.innerHTML = '';
+    wrapper.appendChild(imagePreview);
+    applyTransform();
+  };
+  reader.readAsDataURL(file);
+});
+
+wrapper.addEventListener('mousedown', e => {
+  if (mode !== 'bg' || e.target !== wrapper) return;
+  isImgDragging = true;
+  wrapper.style.cursor = 'grabbing';
+  startX = e.clientX - posX;
+  startY = e.clientY - posY;
+  e.preventDefault();
+});
+
+document.addEventListener('mousemove', e => {
+  if (!isImgDragging) return;
+  posX = e.clientX - startX;
+  posY = e.clientY - startY;
+  applyTransform();
+});
+
+document.addEventListener('mouseup', () => {
+  isImgDragging = false;
+  wrapper.style.cursor = 'grab';
+});
+
+wrapper.parentElement.addEventListener('wheel', e => {
+  if (mode !== 'bg') return;
+  e.preventDefault();
+  const delta = -e.deltaY * 0.001;
+  scale = Math.min(Math.max(0.1, scale + delta), 5);
+  applyTransform();
+});
+
+function applyTransform() {
+  wrapper.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+}
+
+// — TOOL BUTTONS —
+bgBtn.addEventListener('click', () => {
+  mode = 'bg'; bgBtn.classList.add('active'); grpBtn.classList.remove('active'); wrapper.style.cursor = 'grab';
+});
+
+grpBtn.addEventListener('click', () => {
+  mode = 'grp'; grpBtn.classList.add('active'); bgBtn.classList.remove('active');
+});
+
+// — ADD / DELETE QUESTION GROUP —
+addGroupBtn.addEventListener('click', () => {
+  optCount.value = '4';
+  optSize.value  = lastSize;
+  qNumber.value  = groups.length + 1;
+  groupModal.classList.remove('hidden');
+});
+
+cancelGroup.addEventListener('click', () => groupModal.classList.add('hidden'));
+
+createGroup.addEventListener('click', () => {
+  const count = +optCount.value;
+  const size  = +optSize.value;
+  const qnum  = qNumber.value.trim();
+  if (![4,5].includes(count) || size < 10 || !qnum) return alert('Invalid values');
+  groupModal.classList.add('hidden'); lastSize = size;
+
+  // initial position
+  const baseX = 10, baseY = 10;
+  const groupData = { question: qnum, count, baseX, baseY, tx: 0, ty: 0 };
+
+  const grp = document.createElement('div');
+  grp.className = 'question-group';
+  grp.dataset.qnum = qnum;
+  grp._data = groupData;
+
+  const badge = document.createElement('div'); badge.className = 'question-number'; badge.innerText = qnum; grp.appendChild(badge);
+  const delBtn = document.createElement('div'); delBtn.className = 'delete-btn'; delBtn.innerHTML = '&times;'; grp.appendChild(delBtn);
+  delBtn.addEventListener('click', () => { grp.remove(); groups = groups.filter(g=>g!==groupData); });
+
+  for (let i=0; i<count; i++) { const sq = document.createElement('div'); sq.className='square'; grp.appendChild(sq); }
+  const totalMargin = (count - 1) * 5;
+  const w = count * size + totalMargin + 10;
+  const h = size + 10;
+  grp.style.width = `${w}px`;
+  grp.style.height = `${h}px`;
+  grp.style.left = baseX + 'px';
+  grp.style.top  = baseY + 'px';
+
+  wrapper.appendChild(grp);
+  groups.push(groupData);
+  makeDraggable(grp, groupData);
+});
+
+function downloadObjectAsJson(exportObj, exportName) {
+    const dataStr = "data:text/json;charset=utf-8," 
+                  + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+    const dlAnchor = document.createElement('a');
+    dlAnchor.setAttribute("href", dataStr);
+    dlAnchor.setAttribute("download", exportName + ".json");
+    document.body.appendChild(dlAnchor);  // Firefox needs anchor in DOM
+    dlAnchor.click();
+    dlAnchor.remove();
+  }
+
+// — SAVE FRAME DATA (to API) —
+saveFrameBtn.addEventListener('click', async () => {
+    if (!imagePreview.src) {
+        return alert('Please load an image first.');
+    }
+    const name = prompt('Frame name:');
+    if (!name) return;
+
+    // get wrapper bounds for screen → image-space conversion
+    const wr = wrapper.getBoundingClientRect();
+
+    const frame = {
+        name, // Include the frame name
+        image_src: imagePreview.src,
+        transform: { scale, x: posX, y: posY },
+        groups: [],
+    };
+
+    // iterate each question-group element
+    wrapper.querySelectorAll('.question-group').forEach(grpEl => {
+        const gRect = grpEl.getBoundingClientRect();
+        const gx = (gRect.left - wr.left) / scale;
+        const gy = (gRect.top - wr.top) / scale;
+        const gw = gRect.width / scale;
+        const gh = gRect.height / scale;
+
+        // now record each square inside this group
+        const squares = [];
+        grpEl.querySelectorAll('.square').forEach(sqEl => {
+            const sRect = sqEl.getBoundingClientRect();
+            const sx = (sRect.left - wr.left) / scale;
+            const sy = (sRect.top - wr.top) / scale;
+            const sw = sRect.width / scale;
+            const sh = sRect.height / scale;
+            squares.push({ x: sx, y: sy, width: sw, height: sh });
+        });
+
+        frame.groups.push({
+            question: grpEl.dataset.qnum,
+            count: squares.length,
+            x: gx,
+            y: gy,
+            width: gw,
+            height: gh,
+            squares // detailed bubble coords
+        });
+    });
+
+    try {
+        const response = await fetch(API_BASE+'/frames', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(frame)
+        });
+
+        if (response.ok) {
+            alert('Frame saved successfully!');
+        } else {
+            const error = await response.json();
+            alert('Error saving frame: ' + error.message);
+        }
+    } catch (err) {
+        console.error('Failed to save frame:', err);
+        alert('Failed to save frame: ' + err.message);
+    }
+});
+
+// — LOAD FRAME (from API) —
+loadFrameBtn.addEventListener('click', async () => {
+    try {
+        const response = await fetch(API_BASE+'/frames');
+        if (!response.ok) {
+            const error = await response.json();
+            alert('Error loading frames: ' + error.message);
+            return;
+        }
+
+        const frames = await response.json();
+        frameSelect.innerHTML = '';
+        frames.forEach(frame => {
+            const opt = document.createElement('option');
+            opt.value = frame.id; // Assume each frame has a unique ID
+            opt.text = frame.name;
+            frameSelect.appendChild(opt);
+        });
+        loadModal.classList.remove('hidden');
+    } catch (err) {
+        console.error('Failed to load frames:', err);
+        alert('Failed to load frames: ' + err.message);
+    }
+});
+
+cancelLoad.addEventListener('click', () => loadModal.classList.add('hidden'));
+
+confirmLoad.addEventListener('click', async () => {
+    const frameId = frameSelect.value;
+    if (!frameId) return;
+
+    try {
+        const response = await fetch(`${API_BASE}/frames/${frameId}`);
+        if (!response.ok) {
+            const error = await response.json();
+            alert('Error loading frame: ' + error.message);
+            return;
+        }
+
+        const frame = await response.json();
+        loadModal.classList.add('hidden');
+
+        // set image + transform
+        imagePreview.src = frame.imageSrc;
+        imagePreview.style.display = 'block';
+        scale = frame.transform.scale;
+        posX = frame.transform.x;
+        posY = frame.transform.y;
+        applyTransform();
+
+        // remove old
+        wrapper.querySelectorAll('.question-group').forEach(el => el.remove());
+        groups = [];
+
+        // recreate groups: use unscaled coordinates so wrapper scale applies once
+        frame.groups.forEach(gd => {
+            const grp = document.createElement('div');
+            grp.className = 'question-group';
+            grp.dataset.qnum = gd.question;
+
+            const badge = document.createElement('div');
+            badge.className = 'question-number';
+            badge.innerText = gd.question;
+            grp.appendChild(badge);
+
+            const delBtn = document.createElement('div');
+            delBtn.className = 'delete-btn';
+            delBtn.innerHTML = '&times;';
+            delBtn.addEventListener('click', () => grp.remove());
+            grp.appendChild(delBtn);
+
+            // create squares visually (they are just flex items)
+            for (let i = 0; i < gd.count; i++) {
+                const sq = document.createElement('div');
+                sq.className = 'square';
+                grp.appendChild(sq);
+            }
+
+            // IMPORTANT: set unscaled left/top/width/height
+            grp.style.left = `${gd.x}px`;
+            grp.style.top = `${gd.y}px`;
+            grp.style.width = `${gd.width}px`;
+            grp.style.height = `${gd.height}px`;
+
+            wrapper.appendChild(grp);
+            groups.push({ question: gd.question, count: gd.count, baseX: gd.x, baseY: gd.y, tx: 0, ty: 0 });
+            makeDraggable(grp);
+        });
+    } catch (err) {
+        console.error('Failed to load frame:', err);
+        alert('Failed to load frame: ' + err.message);
+    }
+});
+    
+
+function makeDraggable(el) {
+  let dragging = false;
+  let startMouseX, startMouseY;
+  let startLeft, startTop;
+  const wrapperRect = () => wrapper.getBoundingClientRect();
+
+  el.addEventListener('mousedown', e => {
+    if (mode !== 'grp') return;
+    e.stopPropagation();
+    dragging = true;
+
+    // record initial mouse pos in screen coords
+    startMouseX = e.clientX;
+    startMouseY = e.clientY;
+
+    // record element's current un‑scaled left/top
+    startLeft = parseFloat(el.style.left);
+    startTop  = parseFloat(el.style.top);
+
+    // change cursor so user knows it's draggable
+    el.style.cursor = 'grabbing';
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    // compute delta in image‑space:
+    // translate movement in screen px to movement in wrapper’s scaled coordinate system
+    const dx = (e.clientX - startMouseX) / scale;
+    const dy = (e.clientY - startMouseY) / scale;
+    el.style.left = `${startLeft + dx}px`;
+    el.style.top  = `${startTop  + dy}px`;
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (!dragging) return;
+    dragging = false;
+    el.style.cursor = 'move';
+  });
+}
+  </script>
+</body>
+</html>

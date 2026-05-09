@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login</title>
+  <style>
+    body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+    form { display: flex; flex-direction: column; width: 300px; gap: 1rem; }
+    input { padding: 0.5rem; font-size: 1rem; }
+    button { padding: 0.5rem; font-size: 1rem; cursor: pointer; }
+    .error { color: red; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>Login</h1>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <div class="error" id="errorMsg" style="display:none;"></div>
+    <button type="submit">Login</button>
+  </form>
+
+  <script>
+    (function() {
+      const form = document.getElementById('loginForm');
+      const errorMsg = document.getElementById('errorMsg');
+      form.addEventListener('submit', async function(event) {
+      event.preventDefault();
+
+      const user = document.getElementById('username').value.trim();
+      const pass = document.getElementById('password').value;
+      errorMsg.style.display = 'none';
+
+      try {
+        // Note the “//” after http:
+        const res = await fetch(`http://localhost:8000/profiles/${encodeURIComponent(user)}`);
+        if (!res.ok) {
+          throw new Error('Ошибка при получении профиля');
+        }
+
+        const data = await res.json();
+
+        // Compare credentials & verification flag
+        if (data.username === user &&
+            data.password === pass &&
+            data.is_verified) {
+          localStorage.setItem('role',     data.role);
+          localStorage.setItem('username', data.username);
+          window.location.href = 'index.html';
+        } else {
+          throw new Error('Неверное имя пользователя или пароль');
+        }
+      } catch (err) {
+        errorMsg.textContent = err.message;
+        errorMsg.style.display = 'block';
+      }
+      });
+    })();
+  </script>
+</body>
+</html>

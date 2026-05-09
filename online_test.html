@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
+        header, footer { background: #333; color: #fff; text-align: center; padding: 1rem; }
+        .logo { height: 50px; }
+        main { flex: 1; padding: 1rem; }
+        .test-list { display: flex; gap: 1rem; margin-bottom: 2rem; }
+        .test-item { padding: 0.5rem 1rem; border: 1px solid #000; border-radius: 5px; cursor: pointer; }
+        .test-item.selected { background: #eee; }
+        #questionContainer { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+        .question-row { display: flex; align-items: center; gap: 1rem; }
+        .choices { display: flex; gap: 0.5rem; }
+        .choice { padding: 0.5rem; border: 2px solid #000; border-radius: 50%; text-align: center; width: 2rem; height: 2rem; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; background-color: transparent; }
+        .choice.selected.first { background-color: #000; border-color: #000; }
+        .choice.selected.changed { background-color: #000; border-color: #000; border-radius: 0; }
+        .controls { margin-top: 1rem; }
+        button { padding: 0.5rem 1rem; margin-right: 1rem; cursor: pointer; }
+        #timer { font-weight: bold; margin-bottom: 1rem; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+    </header>
+    <main>
+        <div id="section-info"></div>
+
+        <!-- Photo viewer -->
+        <div class="photo-viewer" id="photoViewer" style="display:none;">
+            <button id="prevImg">&lt;</button>
+            <img id="currentPhoto" src="" alt="Photo">
+            <button id="nextImg">&gt;</button>
+        </div>
+
+        <div class="test-list" id="testList"></div>
+        <div id="testContainer" style="display:none;">
+            <div id="timer"></div>
+            <div id="questionContainer"></div>
+            <div class="controls">
+                <button id="nextBtn">Next Section</button>
+                <button id="submitBtn" style="display:none;">Submit</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2023 Hogwarts</p>
+        <p>All rights reserved</p>
+    </footer>
+    <script>
+        const sec_names = ['Math 1', 'Math 2', 'ADP', 'Reading', 'Grammer'];
+        const sections = [
+            { questions: 30, choices: 4, duration: 30 },
+            { questions: 30, choices: 5, duration: 60 },
+            { questions: 30, choices: 4, duration: 30 },
+            { questions: 30, choices: 4, duration: 60 },
+            { questions: 30, choices: 4, duration: 45 },
+        ];
+        let currentSection = 0;
+        let selectedVariant = '';
+        let answers = [];
+        let timerInterval;
+        let photosData = [];
+        let currentPhotoIndex = 0;
+
+        function showPhoto() {
+            if (photosData.length === 0) return;
+            const img = document.getElementById('currentPhoto');
+            img.src = `data:image/*;base64,${photosData[currentPhotoIndex]}`;
+        }
+
+        document.getElementById('prevImg').onclick = () => {
+            if (photosData.length === 0) return;
+            currentPhotoIndex = (currentPhotoIndex - 1 + photosData.length) % photosData.length;
+            showPhoto();
+        };
+        document.getElementById('nextImg').onclick = () => {
+            if (photosData.length === 0) return;
+            currentPhotoIndex = (currentPhotoIndex + 1) % photosData.length;
+            showPhoto();
+        };
+
+        async function fetchTests() {
+            try {
+                const res = await fetch('http://localhost:8000/tests');
+                if (!res.ok) throw new Error('Failed to fetch tests');
+                const testsList = await res.json(); // returns array of strings
+                return testsList.map((name, idx) => ({ id: idx + 1, name }));
+            } catch (err) {
+                console.error(err);
+                return [];
+            }
+        }
+
+        function renderTestList(tests) {
+            const list = document.getElementById('testList');
+            tests.forEach(test => {
+                const btn = document.createElement('div');
+                btn.className = 'test-item';
+                btn.textContent = test.name;
+                btn.onclick = (e) => selectTest(test, e.target);
+                list.appendChild(btn);
+            });
+        }
+
+        async function selectTest(test, element) {
+            selectedVariant = test.name;
+            document.querySelectorAll('.test-item').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('testList').style.display = 'none';
+            document.getElementById('testContainer').style.display = 'block';
+
+            // fetch test with photos
+            const res = await fetch(`http://localhost:8000/test/${selectedVariant}`);
+            if (res.ok) {
+                let data = await res.json();
+
+                photosData = data.photos
+                photosData.sort()
+                photosData.reverse()
+                currentPhotoIndex = 0;
+                document.getElementById('photoViewer').style.display = 'flex';
+                showPhoto();
+            }
+
+            startSection(0);
+        }
+
+        function startSection(idx) {
+            clearInterval(timerInterval);
+            currentSection = idx;
+            // Initialize answer tracking: count and choice index
+            answers[idx] = Array.from({ length: sections[idx].questions }, () => ({ count: 0, choice: null }));
+            document.getElementById('section-info').textContent =
+                `${sec_names[idx]} - ${sections[idx].duration} min`;
+            document.getElementById('nextBtn').style.display = idx < sections.length - 1 ? 'inline-block' : 'none';
+            document.getElementById('submitBtn').style.display = idx === sections.length - 1 ? 'inline-block' : 'none';
+            renderSectionQuestions(idx);
+            startTimer(sections[idx].duration * 60);
+        }
+
+        function startTimer(seconds) {
+            const timerEl = document.getElementById('timer');
+            let remaining = seconds;
+            timerEl.textContent = formatTime(remaining);
+            timerInterval = setInterval(() => {
+                if (--remaining <= 0) {
+                    clearInterval(timerInterval);
+                    autoNextOrSubmit();
+                } else {
+                    timerEl.textContent = formatTime(remaining);
+                }
+            }, 1000);
+        }
+
+        function formatTime(sec) {
+            const m = String(Math.floor(sec / 60)).padStart(2, '0');
+            const s = String(sec % 60).padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function renderSectionQuestions(sectionIdx) {
+            const { questions, choices } = sections[sectionIdx];
+            const container = document.getElementById('questionContainer');
+            container.innerHTML = '';
+            for (let q = 0; q < questions; q++) {
+                const row = document.createElement('div');
+                row.className = 'question-row';
+                row.dataset.qIndex = q;
+                const label = document.createElement('div');
+                label.textContent = q + 1;
+                row.appendChild(label);
+                const choicesDiv = document.createElement('div');
+                choicesDiv.className = 'choices';
+                for (let c = 0; c < choices; c++) {
+                    const choice = document.createElement('div');
+                    choice.className = 'choice';
+                    choice.textContent = String.fromCharCode(1072 + c);
+                    choice.onclick = () => selectChoice(sectionIdx, q, c, choice);
+                    choicesDiv.appendChild(choice);
+                }
+                row.appendChild(choicesDiv);
+                container.appendChild(row);
+            }
+        }
+
+        function selectChoice(section, question, choiceIdx, el) {
+            const ans = answers[section][question];
+            if (ans.count >= 2) return; // no more changes
+            const row = el.parentElement;
+            // clear styles on all choices
+            row.querySelectorAll('.choice').forEach(c => c.classList.remove('selected', 'first', 'changed'));
+            // increment count
+            ans.count++;
+            ans.choice = choiceIdx;
+            // apply style
+            if (ans.count === 1) {
+                el.classList.add('selected', 'first');
+            } else if (ans.count === 2) {
+                el.classList.add('selected', 'changed');
+            }
+        }
+
+        function autoNextOrSubmit() {
+            if (currentSection < sections.length - 1) startSection(currentSection + 1);
+            else submitResults();
+        }
+
+        document.getElementById('nextBtn').onclick = () => {
+            clearInterval(timerInterval);
+            autoNextOrSubmit();
+        };
+        document.getElementById('submitBtn').onclick = submitResults;
+
+        async function submitResults() {
+            clearInterval(timerInterval);
+            // Prepare answers payload
+            const role = localStorage.getItem('role') || '';
+            const response = answers.flat().map(ans => ans.choice === null ? '(пусто)' : String.fromCharCode(1072 + ans.choice));
+            const selected = response
+            const formData = new FormData();
+            formData.append("role", role);
+            response.forEach(item => formData.append("response", item));
+
+            try {
+                const response = await fetch(`http://localhost:8000/check3/${selectedVariant}`, {
+                method: "POST",
+                body: formData
+                });
+
+                if (!response.ok) throw new Error('Submission failed');
+                const result = await response.json();
+                const correctAnswers = result.result;
+
+                let outputHTML = `<h2>Score: ${result.score}</h2>`;
+
+                for (let i = 0; i < correctAnswers.length; i++) {
+                    const correct = correctAnswers[i];
+                    const user = selected[i];
+
+                    if (user === correct) {
+                        // User selected the correct answer
+                        outputHTML += `<p>Question ${i + 1}: <span style="color: green;">${user}</span></p>`;
+                    } else {
+                        // User selected the wrong answer
+                        outputHTML += `<p>Question ${i + 1}: <span style="color: red;">${user}</span> → <span style="color: green;">${correct}</span></p>`;
+                    }
+                }
+                outputHTML += '<br><a href="index.html">Главная</a>';
+
+                document.querySelector('main').innerHTML = outputHTML;
+            } catch (err) {
+                console.error(err);
+                document.querySelector('main').innerHTML = '<h2>Submission failed. Please try again.</h2>'+'<br><a href="index.html">Главная</a>';
+            }
+        }
+
+        (async () => {
+            const tests = await fetchTests();
+            renderTestList(tests);
+        })();
+    </script>
+</body>
+</html>

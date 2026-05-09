@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        ;(function() {
+          const role = localStorage.getItem('role')
+          const page = window.location.pathname.split('/').pop()
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
+          // If no one is logged in, go to login
+          if (!role) {
+            if (page !== 'login.html') location.href = 'login.html'
+            return
+          }
+          // If you’re a student and landed on a disallowed page, kick back to “unauthorized.html”
+          if (role === 'student' && !allowedForStudent.includes(page)) {
+            location.href = 'unauthorized.html'
+          }
+        })()
+        </script>
+        
+</head>
+<body>
+    <header>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+    </header>
+    <nav>
+        <a href="index.html">Главная</a>
+        <a>Контакты</a>
+        <a>О нас</a>
+        <a href="#section">Проверка</a>
+        <a href="archive.html">Архив</a>
+    </nav>
+    <main>
+        <section id="section">
+            <h2>Проверка теста</h2>
+        </section>
+        <form id="upload-form" method="post" enctype="multipart/form-data">
+            <label for="variant">Select variant of test:</label>
+            <select name="variant" id="variant" required>
+                <option value="">Select a variant</option>
+            </select>
+            <br>
+            <label for="photo">Select photo to upload:</label>
+            <input type="file" name="photo" id="photo" accept="image/*" required>
+            <button type="submit">Upload Photo</button>
+        </form>
+        <div id="result"></div>
+    </main>
+    <footer>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+        <p>Copyright 2024</p>
+    </footer>
+    <script>
+        const form = document.getElementById('upload-form');
+        const resultDiv = document.getElementById('result');
+        const variantSelect = document.getElementById('variant');
+
+        // Fetch variants from the API and populate the select dropdown
+        async function fetchVariants() {
+            try {
+                const response = await fetch('http://127.0.0.1:8000/tests');
+                if (response.ok) {
+                    const variants = await response.json();
+                    variants.forEach(variant => {
+                        const option = document.createElement('option');
+                        option.value = variant;
+                        option.textContent = variant;
+                        variantSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Failed to fetch variants');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Call fetchVariants when the page loads
+        window.addEventListener('load', fetchVariants);
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            formData.append('role', localStorage.getItem('role') || '');
+            const selectedVariant = variantSelect.value;
+            const response = await fetch(`http://127.0.0.1:8000/check/${selectedVariant}`, {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                const imgElement = document.createElement('img');
+
+                // Set the base64 image string to the img src
+                imgElement.src = `data:image/jpeg;base64,${data.image}`;
+                imgElement.alt = "Processed Image";
+
+                // Clear the resultDiv and append the new image element
+                resultDiv.innerHTML = '';  // Clear previous content
+                resultDiv.appendChild(imgElement);  // Add new image to resultDiv
+            } else {
+                alert("Failed to upload and process the image.");
+            }
+        });
+    </script>
+    <style>
+        select {
+            margin: 10px;
+        }
+        button {
+            margin: 10px;
+        }
+    </style>
+</body>
+</html>

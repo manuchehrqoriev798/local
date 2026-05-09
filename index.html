@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        ;(function() {
+          const role = localStorage.getItem('role')
+          const page = window.location.pathname.split('/').pop()
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
+          // If no one is logged in, go to login
+          if (!role) {
+            if (page !== 'login.html') location.href = 'login.html'
+            return
+          }
+          // If you re a student and landed on a disallowed page, kick back to unauthorized.html
+          if (role === 'student' && !allowedForStudent.includes(page)) {
+            location.href = 'unauthorized.html'
+          }
+        })()
+    </script>
+        
+</head>
+<body>
+    <header>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+        <div id="auth-buttons">
+            <!-- Login/Register or Logout buttons will go here -->
+        </div>
+    </header>
+    <nav>
+        <a href="#section">Главная</a>
+        <a>Контакты</a>
+        <a>О нас</a>
+        <a href="check.html" id="check-link">Проверка</a>
+        <a href="archive.html" id="archive-link">Архив</a>
+        <a href="online_test.html" id="online-test-link">Онлайн тест</a>
+        <a href="profile.html" id="profile-link">Профиль</a>
+    </nav>
+    <main>
+        <section id="section">
+            <h1>Добро пожаловать на сайт Хогвартс!</h1>
+            <img src="media/banner.png" alt="Баннер">
+        </section>
+    </main>
+    <footer>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+        <p>Copyright 2024</p>
+    </footer>
+
+    <script>
+        // Render Profile/Logout buttons
+        (function() {
+          const authDiv = document.getElementById('auth-buttons');
+          const role = localStorage.getItem('role');
+          if (role) {
+            // Profile link
+            const profileBtn = document.createElement('a');
+            profileBtn.href = 'profile.html';
+            profileBtn.textContent = 'Профиль';
+            profileBtn.style.marginRight = '1rem';
+            authDiv.appendChild(profileBtn);
+            // Logout button
+            const logoutBtn = document.createElement('button');
+            logoutBtn.textContent = 'Выйти';
+            logoutBtn.addEventListener('click', () => {
+              localStorage.removeItem('role');
+              window.location.href = 'login.html';
+            });
+            authDiv.appendChild(logoutBtn);
+          }
+        })();
+      </script>
+
+    <!-- <script type="module">
+        // import { initializeAuth, getUserRole } from './auth.js';
+
+        // async function restrictAccessBasedOnRole() {
+        //     const archiveLink = document.getElementById('archive-link');
+        //     const onlineTestLink = document.getElementById('online-test-link');
+        //     const checkLink = document.getElementById('check-link');
+
+        //     const role = await getUserRole();
+
+        //     if (role === 'student') {
+        //         // Students cannot access Archive
+        //         archiveLink.style.display = 'none';
+        //     } else if (!role) {
+        //         // If no role is detected (unauthenticated), restrict access to all non-public links
+        //         archiveLink.style.display = 'none';
+        //         onlineTestLink.style.display = 'none';
+        //         checkLink.style.display = 'none';
+        //     }
+        // }
+
+        // // Initialize authentication and restrict access
+        // initializeAuth();
+        // restrictAccessBasedOnRole();
+    </script> -->
+</body>
+</html>

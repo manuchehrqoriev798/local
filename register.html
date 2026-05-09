@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form id="registerForm">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+        <br>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+        <br>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+        <br>
+        <label for="role">Role</label>
+        <select id="role" name="role" required>
+        <option value="" disabled hidden selected>— select role —</option>
+        <option value="student">Student</option>
+        <option value="admin">Admin</option>
+        </select>
+
+        <br>
+        <button type="submit">Register</button>
+    </form>
+    <p id="responseMessage" style="color: red; display: none;"></p>
+
+    <script>
+        const API_URL = 'http://localhost:8000/auth/register'; // Adjust this to your actual API endpoint
+
+        document.getElementById('registerForm').addEventListener('submit', async function (event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.getElementById('role').value; // Get the role from the form
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, email, password, role })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Registration successful
+                    alert('Registration successful! Redirecting to login...');
+                    window.location.href = '/frontend/login.html'; // Redirect to the login page
+                } else {
+                    // Handle errors returned by the API
+                    document.getElementById('responseMessage').innerText = result.detail || 'Registration failed.';
+                    document.getElementById('responseMessage').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+                document.getElementById('responseMessage').innerText = 'An error occurred. Please try again.';
+                document.getElementById('responseMessage').style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

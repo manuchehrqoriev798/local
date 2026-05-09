@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        ;(function() {
+          const role = localStorage.getItem('role')
+          const page = window.location.pathname.split('/').pop()
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
+          // If no one is logged in, go to login
+          if (!role) {
+            if (page !== 'login.html') location.href = 'login.html'
+            return
+          }
+          // If you’re a student and landed on a disallowed page, kick back to “unauthorized.html”
+          if (role === 'student' && !allowedForStudent.includes(page)) {
+            location.href = 'unauthorized.html'
+          }
+        })()
+    </script>
+        
+</head>
+<body>
+    <header>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+    </header>
+    <nav>
+        <a href="index.html">Главная</a>
+        <a>Контакты</a>
+        <a>О нас</a>
+        <a href="check.html">Проверка</a>
+        <a href="#section">Архив</a>
+    </nav>
+    <main>
+        <section id="section">
+            <h1>Добро пожаловать в архив тестов!</h1>
+            Variant Edit Delete
+            <div id="test-list">
+                <!-- Test variants will be dynamically added here -->
+            </div>
+            <button id="add-test" onclick="addTest()">+</button>
+        </section>
+    </main>
+    <footer>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+        <p>Copyright 2024</p>
+    </footer>
+
+    <script>
+        const apiUrl = 'http://localhost:8000/tests';
+        
+        async function fetchTests() {
+            try {
+                const response = await fetch(apiUrl);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                console.log('Fetched data:', data);
+                renderTestList(data);
+            } catch (error) {
+                console.error('Failed to fetch tests:', error);
+            }
+        }
+
+        async function addTest() {
+            window.location.href = `add_test.html`;
+        }
+
+        async function deleteTest(variant) {
+            const apiUrl = `http://localhost:8000/test/${variant}`;
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'DELETE'
+                });
+                if (response.ok) {
+                    fetchTests();
+                } else {
+                    console.error('Failed to delete test:', await response.json());
+                }
+            } catch (error) {
+                console.error('Failed to delete test:', error);
+            }
+        }
+
+        async function editTest(variant) {
+            window.location.href = `edit_test.html?variant=${variant}`;
+        }
+
+        function renderTestList(tests) {
+            const testList = document.getElementById('test-list');
+            testList.innerHTML = '';
+            if (tests && tests.length) {
+                tests.forEach(test => {
+                    const testItem = document.createElement('div');
+                    testItem.className = 'test-item';
+                    testItem.innerHTML = `
+                        <span>${test}</span>
+                        <button onclick="editTest('${test}')">✏️</button>
+                        <button onclick="deleteTest('${test}')">❌</button>
+                    `;
+                    testList.appendChild(testItem);
+                });
+            } else {
+                testList.innerHTML = '<p>No tests available.</p>';
+            }
+        }
+
+        // Initial fetch
+        fetchTests();
+    </script>
+</body>
+</html>

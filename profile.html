@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        // Authentication and role-based access
+        ;(function() {
+          const role = localStorage.getItem('role');
+          const page = window.location.pathname.split('/').pop();
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html'];
+          if (!role) {
+            location.href = 'login.html';
+            return;
+          }
+          if (role === 'student' && !allowedForStudent.includes(page)) {
+            location.href = 'unauthorized.html';
+          }
+        })();
+    </script>
+</head>
+<body>
+    <header>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+        <div id="auth-buttons" style="float:right;"></div>
+    </header>
+    <nav>
+        <a href="index.html">Главная</a>
+        <a href="check.html" id="check-link">Проверка</a>
+        <a href="online_test.html" id="online-test-link">Онлайн тест</a>
+        <a href="archive.html" id="archive-link">Архив</a>
+        <a href="profile.html" id="profile-link">Профиль</a>
+    </nav>
+    <main>
+        <h1>Ваш профиль</h1>
+        <div id="profileInfo">Загрузка...</div>
+    </main>
+    <footer>
+        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
+        <p>Copyright 2024</p>
+    </footer>
+
+    <script>
+    // Render Profile & Logout buttons
+    (function() {
+      const authDiv = document.getElementById('auth-buttons');
+      const role = localStorage.getItem('role');
+      if (role) {
+        // Profile link
+        const profileBtn = document.createElement('a');
+        profileBtn.href = 'profile.html';
+        profileBtn.textContent = 'Профиль';
+        profileBtn.style.marginRight = '1rem';
+        authDiv.appendChild(profileBtn);
+        // Logout button
+        const logoutBtn = document.createElement('button');
+        logoutBtn.textContent = 'Выйти';
+        logoutBtn.addEventListener('click', () => {
+          localStorage.removeItem('username');
+          localStorage.removeItem('role');
+          window.location.href = 'login.html';
+        });
+        authDiv.appendChild(logoutBtn);
+      }
+    })();
+
+    // Fetch and display user profile
+    (async function() {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/profiles/'+localStorage.getItem('username'))
+        if (!res.ok) throw new Error('Ошибка при получении профиля');
+        const data = await res.json();
+        const container = document.getElementById('profileInfo');
+        container.innerHTML = '';
+        // Iterate through fields
+        for (const [key, value] of Object.entries(data)) {
+          if (key === 'marks' && Array.isArray(value)) {
+            const section = document.createElement('div');
+            section.innerHTML = '<h2>Оценки</h2>';
+            value.forEach(mark => {
+              const p = document.createElement('p');
+              p.textContent = JSON.stringify(mark);
+              section.appendChild(p);
+            });
+            container.appendChild(section);
+          } else if (key !== 'marks') {
+            const p = document.createElement('p');
+            p.textContent = `${key}: ${value}`;
+            container.appendChild(p);
+          }
+        }
+      } catch (err) {
+        document.getElementById('profileInfo').textContent = 'Не удалось загрузить профиль.';
+        console.error(err);
+      }
+    })();
+    </script>
+</body>
+</html>

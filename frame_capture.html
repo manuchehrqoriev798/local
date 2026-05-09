@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OMR Capture System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .controls { margin-bottom: 20px; }
+        #videoContainer { position: relative; width: 100%; max-width: 600px;}
+        video { width: 100%; height: auto; background: #000; transform: scaleX(-1);}
+        .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+        .border-box { position: absolute; border: 3px solid #00ff00; box-sizing: border-box; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="controls">
+            <label>Select Test Variant:
+                <select id="variantSelect" required>
+                    <option value="">Loading variants...</option>
+                </select>
+            </label>
+            <label style="margin-left: 15px;">Select Frame:
+                <select id="frameSelect" required>
+                    <option value="">Loading frames...</option>
+                </select>
+            </label>
+            <button id="captureBtn" class="hidden" disabled>Capture</button>
+        </div>
+
+        <div id="videoContainer">
+            <video id="video" autoplay playsinline muted></video>
+            <div id="overlay" class="overlay"></div>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script type="module">
+        import {API_BASE} from './variables.js'; // Update with your API base URL
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const video = document.getElementById('video');
+            const overlay = document.getElementById('overlay');
+            const variantSelect = document.getElementById('variantSelect');
+            const frameSelect = document.getElementById('frameSelect');
+            const captureBtn = document.getElementById('captureBtn');
+            const resultDiv = document.getElementById('result');
+
+            let currentStream = null;
+            let currentFrame = null;
+
+            // Load initial data
+            async function loadInitialData() {
+            try {
+                // Load variants (tests)
+                const variantsResponse = await fetch(`${API_BASE}/tests`);
+                if (!variantsResponse.ok) throw new Error('Failed to load variants');
+                const variants = await variantsResponse.json();
+                
+                variantSelect.innerHTML = '<option value="">Select variant</option>' + 
+                    variants.map(v => 
+                        `<option value="${v}">${v}</option>` // Update based on actual response structure
+                    ).join('');
+
+                // Load frames
+                const framesResponse = await fetch(`${API_BASE}/frames`);
+                if (!framesResponse.ok) throw new Error('Failed to load frames');
+                const frames = await framesResponse.json();
+                
+                frameSelect.innerHTML = '<option value="">Select frame</option>' + 
+                    frames.map(f => 
+                        `<option value="${f}">${f}</option>` // Update based on actual response structure
+                    ).join('');
+
+                captureBtn.classList.remove('hidden');
+            } catch (error) {
+                console.error('Error loading initial data:', error);
+                resultDiv.textContent = 'Error loading initial data: ' + error.message;
+                // Reset options
+                variantSelect.innerHTML = '<option value="">Error loading variants</option>';
+                frameSelect.innerHTML = '<option value="">Error loading frames</option>';
+            }
+        }
+            // Start camera with selected frame
+            async function startCameraWithFrame(frameConfig) {
+                if (currentStream) {
+                    currentStream.getTracks().forEach(track => track.stop());
+                }
+
+                try {
+                    currentStream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: 'environment',
+                            width: { ideal: frameConfig.image_width },
+                            height: { ideal: frameConfig.image_height }
+                        }
+                    });
+
+                    video.srcObject = currentStream;
+                    await video.play();
+
+                    // Draw overlay borders
+                    overlay.innerHTML = frameConfig.groups.map(group => 
+                        `<div class="border-box" style="
+                            left: ${group.x}px;
+                            top: ${group.y}px;
+                            width: ${group.width}px;
+                            height: ${group.height}px;
+                        "></div>`
+                    ).join('');
+                } catch (error) {
+                    console.error('Camera error:', error);
+                    resultDiv.textContent = 'Error accessing camera';
+                }
+            }
+
+            // Handle frame selection
+            frameSelect.addEventListener('change', async () => {
+                const frameId = frameSelect.value;
+                if (!frameId) return;
+
+                try {
+                    const response = await fetch(`${API_BASE}/frames/${frameId}`);
+                    currentFrame = await response.json();
+                    await startCameraWithFrame(currentFrame);
+                    captureBtn.disabled = false;
+                } catch (error) {
+                    console.error('Error loading frame:', error);
+                    resultDiv.textContent = 'Error loading frame configuration';
+                }
+            });
+
+            // Capture handler
+            captureBtn.addEventListener('click', async () => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+
+                // Set canvas dimensions to match video stream
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+
+                // Draw current video frame to canvas
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                try {
+                    // Convert canvas to Blob
+                    const imageBlob = await new Promise(resolve => 
+                        canvas.toBlob(resolve, 'image/jpeg', 0.9)
+                    );
+
+                    // Create FormData payload
+                    const formData = new FormData();
+                    formData.append('variant', variantSelect.value);
+                    formData.append('frame', JSON.stringify(currentFrame));
+                    formData.append('image', imageBlob, 'capture.jpg');
+
+                    // Send to OMR API
+                    const response = await fetch(`${API_BASE}/check2/${variantSelect.value}`, {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    
+                    const result = await response.json();
+                    resultDiv.textContent = `OMR Processing Result: ${JSON.stringify(result)}`;
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    resultDiv.textContent = 'Error processing OMR';
+                }
+            });
+
+            // Initialize the app
+            await loadInitialData();
+        });
+    </script>
+</body>
+</html>
