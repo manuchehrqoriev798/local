@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="hogwartsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fbbf24"/>
+      <stop offset="50%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Dark background circle -->
+  <circle cx="50" cy="50" r="48" fill="#0a0909" stroke="#fbbf24" stroke-width="2"/>
+  <!-- Decorative stars -->
+  <circle cx="20" cy="25" r="2" fill="#fbbf24" opacity="0.8"/>
+  <circle cx="80" cy="25" r="2" fill="#fbbf24" opacity="0.8"/>
+  <circle cx="15" cy="50" r="1.5" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="85" cy="50" r="1.5" fill="#fbbf24" opacity="0.6"/>
+  <circle cx="25" cy="75" r="1" fill="#fbbf24" opacity="0.5"/>
+  <circle cx="75" cy="75" r="1" fill="#fbbf24" opacity="0.5"/>
+  <!-- H letter in golden gradient -->
+  <text x="50" y="68" font-family="Cinzel, Georgia, serif" font-size="50" font-weight="700" 
+        text-anchor="middle" fill="url(#hogwartsGrad)" filter="url(#glow)">H</text>
+  <!-- Magic wand line -->
+  <line x1="50" y1="15" x2="50" y2="25" stroke="#fbbf24" stroke-width="2" opacity="0.8"/>
+</svg>

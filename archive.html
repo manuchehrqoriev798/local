@@ -1,115 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Archive</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Архив - Хогвартс</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        ;(function() {
-          const role = localStorage.getItem('role')
-          const page = window.location.pathname.split('/').pop()
-          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
-          // If no one is logged in, go to login
+        (function() {
+          const role = localStorage.getItem('role');
+          const page = window.location.pathname.split('/').pop();
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html'];
           if (!role) {
-            if (page !== 'login.html') location.href = 'login.html'
-            return
+            location.href = 'login.html';
+            return;
           }
-          // If you’re a student and landed on a disallowed page, kick back to “unauthorized.html”
           if (role === 'student' && !allowedForStudent.includes(page)) {
-            location.href = 'unauthorized.html'
+            location.href = 'unauthorized.html';
           }
-        })()
+        })();
     </script>
-        
 </head>
 <body>
-    <header>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-    </header>
-    <nav>
-        <a href="index.html">Главная</a>
-        <a>Контакты</a>
-        <a>О нас</a>
-        <a href="check.html">Проверка</a>
-        <a href="#section">Архив</a>
-    </nav>
-    <main>
-        <section id="section">
-            <h1>Добро пожаловать в архив тестов!</h1>
-            Variant Edit Delete
-            <div id="test-list">
-                <!-- Test variants will be dynamically added here -->
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">H</div>
+                <span>Хогвартс</span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="check.html" class="nav-link">Проверка</a>
+                <a href="archive.html" class="nav-link active">Архив</a>
+                <a href="online_test.html" class="nav-link">Онлайн тест</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
             </div>
-            <button id="add-test" onclick="addTest()">+</button>
-        </section>
+            <div class="nav-controls">
+                <span id="user-name" style="color: var(--text-muted); margin-right: 1rem;"></span>
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main style="padding-top: 100px; min-height: calc(100vh - 200px);">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title text-gradient">Архив тестов</h1>
+                <p class="section-subtitle">Управление вариантами тестов</p>
+            </div>
+
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h3 style="margin: 0;"><i class="fas fa-list" style="color: var(--primary-purple); margin-right: 0.5rem;"></i>Список вариантов</h3>
+                    <button id="add-test" onclick="addTest()" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Добавить тест
+                    </button>
+                </div>
+                
+                <div id="test-list" style="display: grid; gap: 1rem;">
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i>
+                        <p>Загрузка тестов...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
-    <footer>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-        <p>Copyright 2024</p>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-hat-wizard"></i> Хогвартс</div>
+            <div class="footer-copy">© 2024 Школа Чародейства и Волшебства</div>
+        </div>
     </footer>
 
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+
+        // Display username
+        const username = localStorage.getItem('username');
+        if (username) document.getElementById('user-name').textContent = username;
+
+        // API Functions
         const apiUrl = 'http://localhost:8000/tests';
         
         async function fetchTests() {
             try {
                 const response = await fetch(apiUrl);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                if (!response.ok) throw new Error('Network response was not ok');
                 const data = await response.json();
-                console.log('Fetched data:', data);
                 renderTestList(data);
             } catch (error) {
+                document.getElementById('test-list').innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i> Ошибка загрузки тестов
+                    </div>`;
                 console.error('Failed to fetch tests:', error);
             }
         }
 
-        async function addTest() {
-            window.location.href = `add_test.html`;
+        function addTest() {
+            window.location.href = 'add_test.html';
         }
 
         async function deleteTest(variant) {
-            const apiUrl = `http://localhost:8000/test/${variant}`;
+            if (!confirm('Удалить тест "' + variant + '"?')) return;
             try {
-                const response = await fetch(apiUrl, {
-                    method: 'DELETE'
-                });
+                const response = await fetch(`http://localhost:8000/test/${variant}`, { method: 'DELETE' });
                 if (response.ok) {
                     fetchTests();
                 } else {
-                    console.error('Failed to delete test:', await response.json());
+                    alert('Ошибка при удалении теста');
                 }
             } catch (error) {
                 console.error('Failed to delete test:', error);
             }
         }
 
-        async function editTest(variant) {
+        function editTest(variant) {
             window.location.href = `edit_test.html?variant=${variant}`;
         }
 
         function renderTestList(tests) {
             const testList = document.getElementById('test-list');
-            testList.innerHTML = '';
-            if (tests && tests.length) {
-                tests.forEach(test => {
-                    const testItem = document.createElement('div');
-                    testItem.className = 'test-item';
-                    testItem.innerHTML = `
-                        <span>${test}</span>
-                        <button onclick="editTest('${test}')">✏️</button>
-                        <button onclick="deleteTest('${test}')">❌</button>
-                    `;
-                    testList.appendChild(testItem);
-                });
-            } else {
-                testList.innerHTML = '<p>No tests available.</p>';
+            if (!tests || !tests.length) {
+                testList.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 2rem;">Нет доступных тестов</p>';
+                return;
             }
+            
+            testList.innerHTML = '';
+            tests.forEach(test => {
+                const testItem = document.createElement('div');
+                testItem.style.cssText = 'display: flex; justify-content: space-between; align-items: center; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md);';
+                testItem.innerHTML = `
+                    <span style="font-weight: 500;"><i class="fas fa-file-alt" style="color: var(--primary-purple); margin-right: 0.5rem;"></i>${test}</span>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button onclick="editTest('${test}')" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button onclick="deleteTest('${test}')" class="btn" style="padding: 0.5rem 1rem; font-size: 0.85rem; background: #dc2626; color: white;">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                testList.appendChild(testItem);
+            });
         }
 
-        // Initial fetch
         fetchTests();
     </script>
 </body>

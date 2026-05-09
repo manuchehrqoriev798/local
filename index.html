@@ -2,101 +2,199 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хогвартс - Школа Чародейства и Волшебства</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        ;(function() {
+        (function() {
           const role = localStorage.getItem('role')
           const page = window.location.pathname.split('/').pop()
           const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
-          // If no one is logged in, go to login
           if (!role) {
             if (page !== 'login.html') location.href = 'login.html'
             return
           }
-          // If you re a student and landed on a disallowed page, kick back to unauthorized.html
           if (role === 'student' && !allowedForStudent.includes(page)) {
             location.href = 'unauthorized.html'
           }
         })()
     </script>
-        
 </head>
 <body>
-    <header>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-        <div id="auth-buttons">
-            <!-- Login/Register or Logout buttons will go here -->
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">H</div>
+                <span>Хогвартс</span>
+            </a>
+            
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link active">Главная</a>
+                <a href="check.html" class="nav-link">Проверка</a>
+                <a href="archive.html" class="nav-link">Архив</a>
+                <a href="online_test.html" class="nav-link">Онлайн тест</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </div>
+
+            <div class="nav-controls">
+                <span id="user-name" style="color: var(--text-muted); margin-right: 1rem;"></span>
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
         </div>
-    </header>
-    <nav>
-        <a href="#section">Главная</a>
-        <a>Контакты</a>
-        <a>О нас</a>
-        <a href="check.html" id="check-link">Проверка</a>
-        <a href="archive.html" id="archive-link">Архив</a>
-        <a href="online_test.html" id="online-test-link">Онлайн тест</a>
-        <a href="profile.html" id="profile-link">Профиль</a>
     </nav>
-    <main>
-        <section id="section">
-            <h1>Добро пожаловать на сайт Хогвартс!</h1>
-            <img src="media/banner.png" alt="Баннер">
-        </section>
-    </main>
-    <footer>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-        <p>Copyright 2024</p>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content animate-fadeIn">
+            <h1 class="hero-title">Добро пожаловать в Хогвартс</h1>
+            <p class="hero-subtitle">Школа Чародейства и Волшебства. Откройте для себя мир магии, изучайте заклинания и становитесь частью волшебного сообщества.</p>
+            <div class="hero-buttons">
+                <a href="online_test.html" class="btn btn-primary">
+                    <i class="fas fa-hat-wizard"></i> Начать тест
+                </a>
+                <a href="check.html" class="btn btn-secondary">
+                    <i class="fas fa-check-circle"></i> Проверка
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title text-gradient">Возможности платформы</h2>
+                <p class="section-subtitle">Используйте все инструменты для успешного обучения</p>
+            </div>
+            
+            <div class="grid grid-3">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="width: 50px; height: 50px; background: var(--primary-gold); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--bg-primary); font-size: 1.5rem; margin-bottom: 1rem; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);">
+                            <i class="fas fa-hat-wizard"></i>
+                        </div>
+                        <h3 class="card-title">Онлайн тесты</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Проходите волшебные тесты и проверяйте свои знания заклинаний, зельеварения и истории магии.</p>
+                        <a href="online_test.html" class="btn btn-secondary" style="margin-top: 1rem; width: 100%;">Перейти</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="width: 50px; height: 50px; background: var(--primary-gold); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--bg-primary); font-size: 1.5rem; margin-bottom: 1rem; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);">
+                            <i class="fas fa-archive"></i>
+                        </div>
+                        <h3 class="card-title">Архив</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Доступ к архиву учебных материалов, прошлых тестов и волшебных библиотечных ресурсов.</p>
+                        <a href="archive.html" class="btn btn-secondary" style="margin-top: 1rem; width: 100%;">Открыть</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div style="width: 50px; height: 50px; background: var(--primary-gold); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--bg-primary); font-size: 1.5rem; margin-bottom: 1rem; box-shadow: 0 0 15px rgba(251, 191, 36, 0.3);">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <h3 class="card-title">Проверка</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Проверяйте свои ответы и получайте мгновенную обратную связь от системы оценки.</p>
+                        <a href="check.html" class="btn btn-secondary" style="margin-top: 1rem; width: 100%;">Проверить</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="section" style="background: var(--bg-secondary);">
+        <div class="container">
+            <div class="grid grid-4" style="text-align: center;">
+                <div>
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--primary-gold); text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);">4</div>
+                    <div style="color: var(--text-muted);">Факультета</div>
+                </div>
+                <div>
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--primary-gold); text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);">1000+</div>
+                    <div style="color: var(--text-muted);">Учеников</div>
+                </div>
+                <div>
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--primary-gold); text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);">∞</div>
+                    <div style="color: var(--text-muted);">Заклинаний</div>
+                </div>
+                <div>
+                    <div style="font-size: 3rem; font-weight: 700; color: var(--primary-gold); text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);">7</div>
+                    <div style="color: var(--text-muted);">Курсов обучения</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-hat-wizard"></i> Хогвартс
+            </div>
+            <div class="footer-copy">
+                © 2024 Школа Чародейства и Волшебства. Все права защищены.
+            </div>
+        </div>
     </footer>
 
     <script>
-        // Render Profile/Logout buttons
-        (function() {
-          const authDiv = document.getElementById('auth-buttons');
-          const role = localStorage.getItem('role');
-          if (role) {
-            // Profile link
-            const profileBtn = document.createElement('a');
-            profileBtn.href = 'profile.html';
-            profileBtn.textContent = 'Профиль';
-            profileBtn.style.marginRight = '1rem';
-            authDiv.appendChild(profileBtn);
-            // Logout button
-            const logoutBtn = document.createElement('button');
-            logoutBtn.textContent = 'Выйти';
-            logoutBtn.addEventListener('click', () => {
-              localStorage.removeItem('role');
-              window.location.href = 'login.html';
-            });
-            authDiv.appendChild(logoutBtn);
-          }
-        })();
-      </script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
 
-    <!-- <script type="module">
-        // import { initializeAuth, getUserRole } from './auth.js';
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
+        });
 
-        // async function restrictAccessBasedOnRole() {
-        //     const archiveLink = document.getElementById('archive-link');
-        //     const onlineTestLink = document.getElementById('online-test-link');
-        //     const checkLink = document.getElementById('check-link');
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('role');
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        });
 
-        //     const role = await getUserRole();
+        // Display username if available
+        const username = localStorage.getItem('username');
+        if (username) {
+            document.getElementById('user-name').textContent = username;
+        }
 
-        //     if (role === 'student') {
-        //         // Students cannot access Archive
-        //         archiveLink.style.display = 'none';
-        //     } else if (!role) {
-        //         // If no role is detected (unauthenticated), restrict access to all non-public links
-        //         archiveLink.style.display = 'none';
-        //         onlineTestLink.style.display = 'none';
-        //         checkLink.style.display = 'none';
-        //     }
-        // }
-
-        // // Initialize authentication and restrict access
-        // initializeAuth();
-        // restrictAccessBasedOnRole();
-    </script> -->
+        // Hide archive link for students
+        const role = localStorage.getItem('role');
+        if (role === 'student') {
+            const archiveLink = document.querySelector('a[href="archive.html"]');
+            if (archiveLink) archiveLink.style.display = 'none';
+        }
+    </script>
 </body>
 </html>

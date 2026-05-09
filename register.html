@@ -1,42 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - Хогвартс</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>Register</h1>
-    <form id="registerForm">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-        <br>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <label for="role">Role</label>
-        <select id="role" name="role" required>
-        <option value="" disabled hidden selected>— select role —</option>
-        <option value="student">Student</option>
-        <option value="admin">Admin</option>
-        </select>
+    <div class="auth-container">
+        <div class="auth-card animate-fadeIn">
+            <div class="auth-header">
+                <div class="auth-logo">H</div>
+                <h1 class="auth-title">Регистрация</h1>
+                <p class="auth-subtitle">Создайте аккаунт в Хогвартсе</p>
+            </div>
 
-        <br>
-        <button type="submit">Register</button>
-    </form>
-    <p id="responseMessage" style="color: red; display: none;"></p>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label class="form-label" for="username">
+                        <i class="fas fa-user" style="margin-right: 0.5rem; color: var(--primary-purple);"></i>Имя пользователя
+                    </label>
+                    <input type="text" id="username" class="form-input" placeholder="Придумайте имя пользователя" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="email">
+                        <i class="fas fa-envelope" style="margin-right: 0.5rem; color: var(--primary-purple);"></i>Email
+                    </label>
+                    <input type="email" id="email" class="form-input" placeholder="Введите email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        <i class="fas fa-lock" style="margin-right: 0.5rem; color: var(--primary-purple);"></i>Пароль
+                    </label>
+                    <input type="password" id="password" class="form-input" placeholder="Придумайте пароль" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="role">
+                        <i class="fas fa-hat-wizard" style="margin-right: 0.5rem; color: var(--primary-purple);"></i>Роль
+                    </label>
+                    <select id="role" class="form-select" required>
+                        <option value="" disabled selected>Выберите роль</option>
+                        <option value="student">Ученик</option>
+                        <option value="admin">Администратор</option>
+                    </select>
+                </div>
+
+                <div class="alert alert-error" id="responseMessage" style="display: none;"></div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-user-plus"></i> Зарегистрироваться
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Уже есть аккаунт? <a href="login.html">Войти</a></p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const API_URL = 'http://localhost:8000/auth/register'; // Adjust this to your actual API endpoint
+        const API_URL = 'http://localhost:8000/auth/register';
 
         document.getElementById('registerForm').addEventListener('submit', async function (event) {
-            event.preventDefault(); // Prevent the default form submission behavior
+            event.preventDefault();
 
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const role = document.getElementById('role').value; // Get the role from the form
+            const role = document.getElementById('role').value;
 
             try {
                 const response = await fetch(API_URL, {
@@ -50,18 +86,18 @@
                 const result = await response.json();
 
                 if (response.ok) {
-                    // Registration successful
-                    alert('Registration successful! Redirecting to login...');
-                    window.location.href = '/frontend/login.html'; // Redirect to the login page
+                    alert('Регистрация успешна! Перенаправление на страницу входа...');
+                    window.location.href = 'login.html';
                 } else {
-                    // Handle errors returned by the API
-                    document.getElementById('responseMessage').innerText = result.detail || 'Registration failed.';
-                    document.getElementById('responseMessage').style.display = 'block';
+                    const msgDiv = document.getElementById('responseMessage');
+                    msgDiv.innerText = result.detail || 'Ошибка регистрации.';
+                    msgDiv.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error during registration:', error);
-                document.getElementById('responseMessage').innerText = 'An error occurred. Please try again.';
-                document.getElementById('responseMessage').style.display = 'block';
+                const msgDiv = document.getElementById('responseMessage');
+                msgDiv.innerText = 'Произошла ошибка. Попробуйте снова.';
+                msgDiv.style.display = 'block';
             }
         });
     </script>

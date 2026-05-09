@@ -2,11 +2,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Профиль</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Профиль - Хогвартс</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        // Authentication and role-based access
-        ;(function() {
+        (function() {
           const role = localStorage.getItem('role');
           const page = window.location.pathname.split('/').pop();
           const allowedForStudent = ['index.html','profile.html','check.html','online_test.html'];
@@ -21,80 +23,140 @@
     </script>
 </head>
 <body>
-    <header>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-        <div id="auth-buttons" style="float:right;"></div>
-    </header>
-    <nav>
-        <a href="index.html">Главная</a>
-        <a href="check.html" id="check-link">Проверка</a>
-        <a href="online_test.html" id="online-test-link">Онлайн тест</a>
-        <a href="archive.html" id="archive-link">Архив</a>
-        <a href="profile.html" id="profile-link">Профиль</a>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">H</div>
+                <span>Хогвартс</span>
+            </a>
+            
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="check.html" class="nav-link">Проверка</a>
+                <a href="archive.html" class="nav-link" id="archive-nav-link">Архив</a>
+                <a href="online_test.html" class="nav-link">Онлайн тест</a>
+                <a href="profile.html" class="nav-link active">Профиль</a>
+            </div>
+
+            <div class="nav-controls">
+                <span id="user-name" style="color: var(--text-muted); margin-right: 1rem;"></span>
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
     </nav>
-    <main>
-        <h1>Ваш профиль</h1>
-        <div id="profileInfo">Загрузка...</div>
+
+    <!-- Main Content -->
+    <main style="padding-top: 100px; min-height: calc(100vh - 200px);">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title text-gradient">Ваш профиль</h1>
+                <p class="section-subtitle">Информация об ученике</p>
+            </div>
+
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div id="profileInfo" style="padding: 2rem;">
+                    <div style="text-align: center; padding: 3rem;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-purple);"></i>
+                        <p style="margin-top: 1rem; color: var(--text-muted);">Загрузка профиля...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
-    <footer>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-        <p>Copyright 2024</p>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-hat-wizard"></i> Хогвартс
+            </div>
+            <div class="footer-copy">
+                © 2024 Школа Чародейства и Волшебства
+            </div>
+        </div>
     </footer>
 
     <script>
-    // Render Profile & Logout buttons
-    (function() {
-      const authDiv = document.getElementById('auth-buttons');
-      const role = localStorage.getItem('role');
-      if (role) {
-        // Profile link
-        const profileBtn = document.createElement('a');
-        profileBtn.href = 'profile.html';
-        profileBtn.textContent = 'Профиль';
-        profileBtn.style.marginRight = '1rem';
-        authDiv.appendChild(profileBtn);
-        // Logout button
-        const logoutBtn = document.createElement('button');
-        logoutBtn.textContent = 'Выйти';
-        logoutBtn.addEventListener('click', () => {
-          localStorage.removeItem('username');
-          localStorage.removeItem('role');
-          window.location.href = 'login.html';
+        // Mobile menu toggle
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        
+        mobileMenuToggle.addEventListener('click', function() {
+            navMenu.classList.toggle('active');
+            this.classList.toggle('active');
         });
-        authDiv.appendChild(logoutBtn);
-      }
-    })();
 
-    // Fetch and display user profile
-    (async function() {
-      try {
-        const res = await fetch('http://127.0.0.1:8000/profiles/'+localStorage.getItem('username'))
-        if (!res.ok) throw new Error('Ошибка при получении профиля');
-        const data = await res.json();
-        const container = document.getElementById('profileInfo');
-        container.innerHTML = '';
-        // Iterate through fields
-        for (const [key, value] of Object.entries(data)) {
-          if (key === 'marks' && Array.isArray(value)) {
-            const section = document.createElement('div');
-            section.innerHTML = '<h2>Оценки</h2>';
-            value.forEach(mark => {
-              const p = document.createElement('p');
-              p.textContent = JSON.stringify(mark);
-              section.appendChild(p);
-            });
-            container.appendChild(section);
-          } else if (key !== 'marks') {
-            const p = document.createElement('p');
-            p.textContent = `${key}: ${value}`;
-            container.appendChild(p);
-          }
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.removeItem('role');
+            localStorage.removeItem('username');
+            window.location.href = 'login.html';
+        });
+
+        // Display username
+        const username = localStorage.getItem('username');
+        if (username) {
+            document.getElementById('user-name').textContent = username;
         }
-      } catch (err) {
-        document.getElementById('profileInfo').textContent = 'Не удалось загрузить профиль.';
-        console.error(err);
-      }
-    })();
+
+        // Hide archive for students
+        const role = localStorage.getItem('role');
+        if (role === 'student') {
+            document.getElementById('archive-nav-link').style.display = 'none';
+        }
+
+        // Fetch and display user profile
+        (async function() {
+            try {
+                const res = await fetch('http://127.0.0.1:8000/profiles/' + localStorage.getItem('username'));
+                if (!res.ok) throw new Error('Ошибка при получении профиля');
+                const data = await res.json();
+                
+                const container = document.getElementById('profileInfo');
+                let html = '<div style="display: grid; gap: 1rem;">';
+                
+                for (const [key, value] of Object.entries(data)) {
+                    if (key === 'marks' && Array.isArray(value)) {
+                        html += '<div style="margin-top: 1rem;">';
+                        html += '<h3 style="font-family: var(--font-family-heading); margin-bottom: 1rem; color: var(--primary-purple);">';
+                        html += '<i class="fas fa-star" style="margin-right: 0.5rem;"></i>Оценки</h3>';
+                        if (value.length === 0) {
+                            html += '<p style="color: var(--text-muted);">Нет оценок</p>';
+                        } else {
+                            value.forEach(mark => {
+                                html += '<div style="background: var(--bg-secondary); padding: 1rem; border-radius: var(--radius-md); margin-bottom: 0.5rem;">';
+                                html += `<p style="margin: 0; font-family: var(--font-family-mono); font-size: 0.9rem;">${JSON.stringify(mark)}</p>`;
+                                html += '</div>';
+                            });
+                        }
+                        html += '</div>';
+                    } else if (key !== 'marks' && key !== 'password') {
+                        html += '<div style="display: flex; justify-content: space-between; padding: 0.75rem; background: var(--bg-secondary); border-radius: var(--radius-md);">';
+                        html += `<span style="color: var(--text-muted); text-transform: capitalize;">${key}:</span>`;
+                        html += `<span style="font-weight: 500; color: var(--text-primary);">${value}</span>`;
+                        html += '</div>';
+                    }
+                }
+                
+                html += '</div>';
+                container.innerHTML = html;
+            } catch (err) {
+                document.getElementById('profileInfo').innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fas fa-exclamation-circle"></i> Не удалось загрузить профиль.
+                    </div>
+                `;
+                console.error(err);
+            }
+        })();
     </script>
 </body>
 </html>

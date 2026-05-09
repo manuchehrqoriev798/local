@@ -1,15 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Image + OMR Group Builder</title>
+  <title>OMR Редактор - Хогвартс</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    (function() {
+      const role = localStorage.getItem('role')
+      const page = window.location.pathname.split('/').pop()
+      const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
+      if (!role) {
+        if (page !== 'login.html') location.href = 'login.html'
+        return
+      }
+      if (role === 'student' && !allowedForStudent.includes(page)) {
+        location.href = 'unauthorized.html'
+      }
+    })()
+  </script>
   <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
 </head>
 <body>
+  <!-- Navigation -->
+  <nav class="navbar" id="navbar" style="position: relative;">
+      <div class="nav-container">
+          <a href="index.html" class="nav-logo">
+              <div class="logo-icon">H</div>
+              <span>Хогвартс</span>
+          </a>
+          <div class="nav-menu" id="nav-menu">
+              <a href="index.html" class="nav-link">Главная</a>
+              <a href="check.html" class="nav-link">Проверка</a>
+              <a href="archive.html" class="nav-link">Архив</a>
+              <a href="online_test.html" class="nav-link">Онлайн тест</a>
+              <a href="profile.html" class="nav-link">Профиль</a>
+          </div>
+          <div class="nav-controls">
+              <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                  <i class="fas fa-sign-out-alt"></i> Выйти
+              </button>
+              <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                  <span></span><span></span><span></span>
+              </button>
+          </div>
+      </div>
+  </nav>
 
-  <h2>Upload, Drag & Zoom Image + Add OMR Groups</h2>
+  <div style="padding: 1rem;">
+    <h2><i class="fas fa-edit" style="color: var(--primary-purple);"></i> OMR Редактор</h2>
   <input type="file" id="imageInput" accept="image/*" />
   <button id="addGroup">Add Question Group</button>
   <button id="saveFrame">Save Frame</button>
@@ -410,6 +452,18 @@ function makeDraggable(el) {
     el.style.cursor = 'move';
   });
 }
+
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+        document.getElementById('nav-menu').classList.toggle('active');
+        this.classList.toggle('active');
+    });
+
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        localStorage.clear();
+        window.location.href = 'login.html';
+    });
   </script>
 </body>
 </html>

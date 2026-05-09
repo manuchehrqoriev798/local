@@ -1,55 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Test</title>
+    <title>Онлайн тест - Хогвартс</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        header, footer { background: #333; color: #fff; text-align: center; padding: 1rem; }
-        .logo { height: 50px; }
-        main { flex: 1; padding: 1rem; }
-        .test-list { display: flex; gap: 1rem; margin-bottom: 2rem; }
-        .test-item { padding: 0.5rem 1rem; border: 1px solid #000; border-radius: 5px; cursor: pointer; }
-        .test-item.selected { background: #eee; }
-        #questionContainer { display: grid; grid-template-columns: 1fr; gap: 1rem; }
-        .question-row { display: flex; align-items: center; gap: 1rem; }
+        .test-list { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem; }
+        .test-item { 
+            padding: 1rem 2rem; 
+            border: 2px solid var(--border-primary); 
+            border-radius: var(--radius-lg); 
+            cursor: pointer;
+            background: var(--bg-card);
+            transition: all var(--transition-fast);
+        }
+        .test-item:hover { border-color: var(--primary-purple); transform: translateY(-2px); }
+        .test-item.selected { 
+            background: var(--gradient-primary); 
+            color: white; 
+            border-color: var(--primary-purple);
+        }
+        #questionContainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+        .question-row { 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+            padding: 0.75rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
         .choices { display: flex; gap: 0.5rem; }
-        .choice { padding: 0.5rem; border: 2px solid #000; border-radius: 50%; text-align: center; width: 2rem; height: 2rem; display: inline-flex; justify-content: center; align-items: center; cursor: pointer; background-color: transparent; }
-        .choice.selected.first { background-color: #000; border-color: #000; }
-        .choice.selected.changed { background-color: #000; border-color: #000; border-radius: 0; }
-        .controls { margin-top: 1rem; }
-        button { padding: 0.5rem 1rem; margin-right: 1rem; cursor: pointer; }
-        #timer { font-weight: bold; margin-bottom: 1rem; }
+        .choice { 
+            padding: 0.5rem; 
+            border: 2px solid var(--border-secondary); 
+            border-radius: 50%; 
+            text-align: center; 
+            width: 2rem; 
+            height: 2rem; 
+            display: inline-flex; 
+            justify-content: center; 
+            align-items: center; 
+            cursor: pointer; 
+            background: var(--bg-card);
+            transition: all var(--transition-fast);
+        }
+        .choice:hover { border-color: var(--primary-purple); }
+        .choice.selected.first { background: var(--primary-purple); border-color: var(--primary-purple); color: white; }
+        .choice.selected.changed { background: var(--primary-gold); border-color: var(--primary-gold); color: #1c1917; border-radius: var(--radius-sm); }
+        #timer { 
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            margin-bottom: 1rem;
+            color: var(--primary-purple);
+            font-family: var(--font-family-mono);
+        }
+        .photo-viewer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            background: var(--bg-secondary);
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+        }
+        .photo-viewer img {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+        }
     </style>
 </head>
 <body>
-    <header>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-    </header>
-    <main>
-        <div id="section-info"></div>
-
-        <!-- Photo viewer -->
-        <div class="photo-viewer" id="photoViewer" style="display:none;">
-            <button id="prevImg">&lt;</button>
-            <img id="currentPhoto" src="" alt="Photo">
-            <button id="nextImg">&gt;</button>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">H</div>
+                <span>Хогвартс</span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="check.html" class="nav-link">Проверка</a>
+                <a href="archive.html" class="nav-link" id="archive-nav-link">Архив</a>
+                <a href="online_test.html" class="nav-link active">Онлайн тест</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </div>
+            <div class="nav-controls">
+                <span id="user-name" style="color: var(--text-muted); margin-right: 1rem;"></span>
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
         </div>
+    </nav>
 
-        <div class="test-list" id="testList"></div>
-        <div id="testContainer" style="display:none;">
-            <div id="timer"></div>
-            <div id="questionContainer"></div>
-            <div class="controls">
-                <button id="nextBtn">Next Section</button>
-                <button id="submitBtn" style="display:none;">Submit</button>
+    <main style="padding-top: 100px; min-height: calc(100vh - 200px);">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title text-gradient">Онлайн тест</h1>
+                <p class="section-subtitle">Выберите вариант теста для начала</p>
+            </div>
+
+            <div id="section-info" style="text-align: center; margin-bottom: 1rem; font-size: 1.25rem; color: var(--text-muted);"></div>
+
+            <!-- Photo viewer -->
+            <div class="photo-viewer" id="photoViewer" style="display:none;">
+                <button id="prevImg" class="btn btn-secondary"><i class="fas fa-chevron-left"></i></button>
+                <img id="currentPhoto" src="" alt="Photo">
+                <button id="nextImg" class="btn btn-secondary"><i class="fas fa-chevron-right"></i></button>
+            </div>
+
+            <div class="test-list" id="testList"></div>
+            
+            <div id="testContainer" style="display:none;">
+                <div style="text-align: center;">
+                    <div id="timer"></div>
+                </div>
+                <div id="questionContainer"></div>
+                <div class="controls" style="margin-top: 2rem; text-align: center;">
+                    <button id="nextBtn" class="btn btn-secondary" style="margin-right: 1rem;">
+                        <i class="fas fa-arrow-right"></i> Следующий раздел
+                    </button>
+                    <button id="submitBtn" class="btn btn-primary" style="display:none;">
+                        <i class="fas fa-check"></i> Завершить тест
+                    </button>
+                </div>
             </div>
         </div>
     </main>
-    <footer>
-        <p>&copy; 2023 Hogwarts</p>
-        <p>All rights reserved</p>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-hat-wizard"></i> Хогвартс</div>
+            <div class="footer-copy">© 2024 Школа Чародейства и Волшебства</div>
+        </div>
     </footer>
     <script>
         const sec_names = ['Math 1', 'Math 2', 'ADP', 'Reading', 'Grammer'];
@@ -216,6 +308,25 @@
         };
         document.getElementById('submitBtn').onclick = submitResults;
 
+        // Navigation and user handling
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+
+        const username = localStorage.getItem('username');
+        if (username) document.getElementById('user-name').textContent = username;
+
+        const role = localStorage.getItem('role');
+        if (role === 'student') {
+            document.getElementById('archive-nav-link').style.display = 'none';
+        }
+
         async function submitResults() {
             clearInterval(timerInterval);
             // Prepare answers payload
@@ -236,26 +347,43 @@
                 const result = await response.json();
                 const correctAnswers = result.result;
 
-                let outputHTML = `<h2>Score: ${result.score}</h2>`;
+                let outputHTML = `
+                    <div class="section-header">
+                        <h2 class="section-title text-gradient"><i class="fas fa-trophy" style="margin-right: 0.5rem;"></i>Результаты</h2>
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--primary-purple); margin: 1rem 0;">${result.score}</div>
+                        <p class="section-subtitle">Ваш счет</p>
+                    </div>
+                    <div style="display: grid; gap: 0.5rem; max-width: 600px; margin: 0 auto;">
+                `;
 
                 for (let i = 0; i < correctAnswers.length; i++) {
                     const correct = correctAnswers[i];
                     const user = selected[i];
+                    const isCorrect = user === correct;
 
-                    if (user === correct) {
-                        // User selected the correct answer
-                        outputHTML += `<p>Question ${i + 1}: <span style="color: green;">${user}</span></p>`;
-                    } else {
-                        // User selected the wrong answer
-                        outputHTML += `<p>Question ${i + 1}: <span style="color: red;">${user}</span> → <span style="color: green;">${correct}</span></p>`;
-                    }
+                    outputHTML += `
+                        <div style="display: flex; justify-content: space-between; padding: 0.75rem; background: ${isCorrect ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)'}; border-radius: var(--radius-md); border-left: 4px solid ${isCorrect ? '#22c55e' : '#ef4444'};">
+                            <span>Вопрос ${i + 1}</span>
+                            <span>
+                                <span style="color: ${isCorrect ? '#22c55e' : '#ef4444'}; font-weight: 600;">${user}</span>
+                                ${!isCorrect ? `<span style="color: #22c55e; margin-left: 0.5rem;">→ ${correct}</span>` : ''}
+                            </span>
+                        </div>
+                    `;
                 }
-                outputHTML += '<br><a href="index.html">Главная</a>';
+                outputHTML += '</div><div style="text-align: center; margin-top: 2rem;"><a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> На главную</a></div>';
 
-                document.querySelector('main').innerHTML = outputHTML;
+                document.querySelector('.container').innerHTML = outputHTML;
             } catch (err) {
                 console.error(err);
-                document.querySelector('main').innerHTML = '<h2>Submission failed. Please try again.</h2>'+'<br><a href="index.html">Главная</a>';
+                document.querySelector('.container').innerHTML = `
+                    <div class="alert alert-error" style="max-width: 600px; margin: 2rem auto;">
+                        <i class="fas fa-exclamation-circle"></i> Ошибка отправки. Попробуйте снова.
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="index.html" class="btn btn-primary">На главную</a>
+                    </div>
+                `;
             }
         }
 

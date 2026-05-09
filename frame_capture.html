@@ -1,13 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OMR Capture System</title>
+    <title>OMR Сканер - Хогвартс</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        (function() {
+          const role = localStorage.getItem('role')
+          const page = window.location.pathname.split('/').pop()
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
+          if (!role) {
+            if (page !== 'login.html') location.href = 'login.html'
+            return
+          }
+          if (role === 'student' && !allowedForStudent.includes(page)) {
+            location.href = 'unauthorized.html'
+          }
+        })()
+    </script>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .controls { margin-bottom: 20px; }
+        .omr-container { max-width: 800px; margin: 0 auto; }
+        .omr-controls { margin-bottom: 20px; }
         #videoContainer { position: relative; width: 100%; max-width: 600px;}
         video { width: 100%; height: auto; background: #000; transform: scaleX(-1);}
         .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
@@ -16,7 +32,39 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">H</div>
+                <span>Хогвартс</span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="check.html" class="nav-link">Проверка</a>
+                <a href="archive.html" class="nav-link">Архив</a>
+                <a href="online_test.html" class="nav-link">Онлайн тест</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </div>
+            <div class="nav-controls">
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main style="padding-top: 100px; padding-bottom: 2rem;">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title text-gradient"><i class="fas fa-camera"></i> OMR Сканер</h1>
+                <p class="section-subtitle">Сканирование бланков тестов</p>
+            </div>
+            
+            <div class="card omr-container">
         <div class="controls">
             <label>Select Test Variant:
                 <select id="variantSelect" required>
@@ -177,6 +225,27 @@
             // Initialize the app
             await loadInitialData();
         });
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
     </script>
+    </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-hat-wizard"></i> Хогвартс</div>
+            <div class="footer-copy">© 2024 Школа Чародейства и Волшебства</div>
+        </div>
+    </footer>
 </body>
 </html>

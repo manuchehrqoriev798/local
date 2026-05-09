@@ -2,63 +2,127 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проверка - Хогвартс</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
-        ;(function() {
-          const role = localStorage.getItem('role')
-          const page = window.location.pathname.split('/').pop()
-          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
-          // If no one is logged in, go to login
+        (function() {
+          const role = localStorage.getItem('role');
+          const page = window.location.pathname.split('/').pop();
+          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html'];
           if (!role) {
-            if (page !== 'login.html') location.href = 'login.html'
-            return
+            location.href = 'login.html';
+            return;
           }
-          // If you’re a student and landed on a disallowed page, kick back to “unauthorized.html”
           if (role === 'student' && !allowedForStudent.includes(page)) {
-            location.href = 'unauthorized.html'
+            location.href = 'unauthorized.html';
           }
-        })()
-        </script>
-        
+        })();
+    </script>
 </head>
 <body>
-    <header>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-    </header>
-    <nav>
-        <a href="index.html">Главная</a>
-        <a>Контакты</a>
-        <a>О нас</a>
-        <a href="#section">Проверка</a>
-        <a href="archive.html">Архив</a>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">H</div>
+                <span>Хогвартс</span>
+            </a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="index.html" class="nav-link">Главная</a>
+                <a href="check.html" class="nav-link active">Проверка</a>
+                <a href="archive.html" class="nav-link" id="archive-nav-link">Архив</a>
+                <a href="online_test.html" class="nav-link">Онлайн тест</a>
+                <a href="profile.html" class="nav-link">Профиль</a>
+            </div>
+            <div class="nav-controls">
+                <span id="user-name" style="color: var(--text-muted); margin-right: 1rem;"></span>
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+                <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
     </nav>
-    <main>
-        <section id="section">
-            <h2>Проверка теста</h2>
-        </section>
-        <form id="upload-form" method="post" enctype="multipart/form-data">
-            <label for="variant">Select variant of test:</label>
-            <select name="variant" id="variant" required>
-                <option value="">Select a variant</option>
-            </select>
-            <br>
-            <label for="photo">Select photo to upload:</label>
-            <input type="file" name="photo" id="photo" accept="image/*" required>
-            <button type="submit">Upload Photo</button>
-        </form>
-        <div id="result"></div>
+
+    <!-- Main Content -->
+    <main style="padding-top: 100px; min-height: calc(100vh - 200px);">
+        <div class="container">
+            <div class="section-header">
+                <h1 class="section-title text-gradient">Проверка теста</h1>
+                <p class="section-subtitle">Загрузите фото бланка для автоматической проверки</p>
+            </div>
+
+            <div class="card" style="max-width: 600px; margin: 0 auto;">
+                <form id="upload-form" style="display: grid; gap: 1.5rem;">
+                    <div class="form-group">
+                        <label class="form-label" for="variant">
+                            <i class="fas fa-list-alt" style="color: var(--primary-purple); margin-right: 0.5rem;"></i>Вариант теста
+                        </label>
+                        <select name="variant" id="variant" class="form-select" required>
+                            <option value="">Выберите вариант</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="photo">
+                            <i class="fas fa-camera" style="color: var(--primary-purple); margin-right: 0.5rem;"></i>Фото бланка
+                        </label>
+                        <input type="file" name="photo" id="photo" class="form-input" accept="image/*" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">
+                        <i class="fas fa-upload"></i> Проверить тест
+                    </button>
+                </form>
+
+                <div id="result" style="margin-top: 2rem;">
+                    <!-- Processed image will appear here -->
+                </div>
+            </div>
+        </div>
     </main>
-    <footer>
-        <img src="media/logo.jpg" alt="Хогвартс" class="logo">
-        <p>Copyright 2024</p>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo"><i class="fas fa-hat-wizard"></i> Хогвартс</div>
+            <div class="footer-copy">© 2024 Школа Чародейства и Волшебства</div>
+        </div>
     </footer>
+
     <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-toggle').addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.toggle('active');
+            this.classList.toggle('active');
+        });
+
+        // Logout
+        document.getElementById('logout-btn').addEventListener('click', function() {
+            localStorage.clear();
+            window.location.href = 'login.html';
+        });
+
+        // Display username
+        const username = localStorage.getItem('username');
+        if (username) document.getElementById('user-name').textContent = username;
+
+        // Hide archive for students
+        const role = localStorage.getItem('role');
+        if (role === 'student') {
+            document.getElementById('archive-nav-link').style.display = 'none';
+        }
+
+        // Form handling
         const form = document.getElementById('upload-form');
         const resultDiv = document.getElementById('result');
         const variantSelect = document.getElementById('variant');
 
-        // Fetch variants from the API and populate the select dropdown
         async function fetchVariants() {
             try {
                 const response = await fetch('http://127.0.0.1:8000/tests');
@@ -70,51 +134,44 @@
                         option.textContent = variant;
                         variantSelect.appendChild(option);
                     });
-                } else {
-                    console.error('Failed to fetch variants');
                 }
             } catch (error) {
                 console.error('Error:', error);
             }
         }
 
-        // Call fetchVariants when the page loads
         window.addEventListener('load', fetchVariants);
 
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
+            
+            resultDiv.innerHTML = '<div style="text-align: center; padding: 2rem;"><i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--primary-purple);"></i><p>Обработка...</p></div>';
 
             const formData = new FormData(form);
             formData.append('role', localStorage.getItem('role') || '');
             const selectedVariant = variantSelect.value;
-            const response = await fetch(`http://127.0.0.1:8000/check/${selectedVariant}`, {
-                method: 'POST',
-                body: formData
-            });
+            
+            try {
+                const response = await fetch(`http://127.0.0.1:8000/check/${selectedVariant}`, {
+                    method: 'POST',
+                    body: formData
+                });
 
-            if (response.ok) {
-                const data = await response.json();
-                const imgElement = document.createElement('img');
-
-                // Set the base64 image string to the img src
-                imgElement.src = `data:image/jpeg;base64,${data.image}`;
-                imgElement.alt = "Processed Image";
-
-                // Clear the resultDiv and append the new image element
-                resultDiv.innerHTML = '';  // Clear previous content
-                resultDiv.appendChild(imgElement);  // Add new image to resultDiv
-            } else {
-                alert("Failed to upload and process the image.");
+                if (response.ok) {
+                    const data = await response.json();
+                    resultDiv.innerHTML = `
+                        <div style="text-align: center;">
+                            <h3 style="margin-bottom: 1rem; color: var(--primary-purple);"><i class="fas fa-check-circle"></i> Результат проверки</h3>
+                            <img src="data:image/jpeg;base64,${data.image}" alt="Processed Image" style="max-width: 100%; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg);">
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Ошибка обработки изображения</div>';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '<div class="alert alert-error"><i class="fas fa-exclamation-circle"></i> Ошибка соединения</div>';
             }
         });
     </script>
-    <style>
-        select {
-            margin: 10px;
-        }
-        button {
-            margin: 10px;
-        }
-    </style>
 </body>
 </html>
