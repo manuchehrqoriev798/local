@@ -8,20 +8,6 @@
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="style2.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script>
-    (function() {
-      const role = localStorage.getItem('role')
-      const page = window.location.pathname.split('/').pop()
-      const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
-      if (!role) {
-        if (page !== 'login.html') location.href = 'login.html'
-        return
-      }
-      if (role === 'student' && !allowedForStudent.includes(page)) {
-        location.href = 'unauthorized.html'
-      }
-    })()
-  </script>
   <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
 </head>
 <body>

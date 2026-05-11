@@ -7,20 +7,6 @@
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        (function() {
-          const role = localStorage.getItem('role')
-          const page = window.location.pathname.split('/').pop()
-          const allowedForStudent = ['index.html','profile.html','check.html','online_test.html']
-          if (!role) {
-            if (page !== 'login.html') location.href = 'login.html'
-            return
-          }
-          if (role === 'student' && !allowedForStudent.includes(page)) {
-            location.href = 'unauthorized.html'
-          }
-        })()
-    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -41,9 +27,14 @@
 
             <div class="nav-controls">
                 <span id="user-name" style="color: var(--text-muted); margin-right: 1rem;"></span>
-                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
-                    <i class="fas fa-sign-out-alt"></i> Выйти
-                </button>
+                <div id="auth-buttons">
+                    <a href="login.html" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.9rem; margin-right: 0.5rem;">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </a>
+                    <a href="register.html" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </a>
+                </div>
                 <button class="mobile-menu-toggle" id="mobile-menu-toggle">
                     <span></span>
                     <span></span>
@@ -176,25 +167,26 @@
             this.classList.toggle('active');
         });
 
-        // Logout functionality
-        document.getElementById('logout-btn').addEventListener('click', function() {
-            localStorage.removeItem('role');
-            localStorage.removeItem('username');
-            window.location.href = 'login.html';
-        });
-
-        // Display username if available
+        // Handle auth state
+        const authButtons = document.getElementById('auth-buttons');
         const username = localStorage.getItem('username');
-        if (username) {
-            document.getElementById('user-name').textContent = username;
-        }
-
-        // Hide archive link for students
         const role = localStorage.getItem('role');
-        if (role === 'student') {
-            const archiveLink = document.querySelector('a[href="archive.html"]');
-            if (archiveLink) archiveLink.style.display = 'none';
+        
+        if (username && role) {
+            // User is logged in - show logout button
+            document.getElementById('user-name').textContent = username;
+            authButtons.innerHTML = `
+                <button class="btn btn-primary" id="logout-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;">
+                    <i class="fas fa-sign-out-alt"></i> Выйти
+                </button>
+            `;
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                localStorage.removeItem('role');
+                localStorage.removeItem('username');
+                window.location.reload();
+            });
         }
+        // If not logged in, default login/register buttons are shown
     </script>
 </body>
 </html>
